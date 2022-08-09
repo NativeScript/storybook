@@ -53,7 +53,9 @@ export class PreviewComponent implements OnInit {
           }, {})
           console.log('args', args);
         }
-        this.dynamicComponentService.getComponentBySelector(storybook.params.component, () => import("../components/components.module").then(m => m.ComponentsModule)).then(componentRef => {
+        const pathToModule = '../components/components.module';
+        const moduleName = 'ComponentsModule';
+        this.dynamicComponentService.getComponentBySelector(storybook.params.component, () => import(pathToModule).then(m => m[moduleName])).then(componentRef => {
           this.addComponentInputs(componentRef, { props: args });
           this.target.insert(componentRef.hostView);
           this.changeDetectorRef.detectChanges();

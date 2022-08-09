@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "storybook",
+  "version": "0.0.1",
+  "generators": {
+    "storybook": {
+      "factory": "./src/generators/storybook/generator",
+      "schema": "./src/generators/storybook/schema.json",
+      "description": "storybook generator"
+    }
+  }
+}
