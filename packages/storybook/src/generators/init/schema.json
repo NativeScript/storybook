@@ -22,10 +22,10 @@
       "enum": ["@storybook/angular", "@storybook/vue"],
       "x-prompt": "What UI framework plugin should storybook use?"
     },
-    "tags": {
-      "type": "string",
-      "description": "Add tags to the project (used for linting)",
-      "alias": "t"
+    "includeExample": {
+      "type": "boolean",
+      "description": "Generate an example component with storybook",
+      "x-prompt": "Do you want to generate an example component with storybook?"
     },
     "directory": {
       "type": "string",
@@ -33,5 +33,5 @@
       "alias": "d"
     }
   },
-  "required": ["name"]
+  "required": ["name", "uiFramework", "includeExample"]
 }

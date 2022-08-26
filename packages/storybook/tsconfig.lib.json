@@ -5,6 +5,9 @@
     "declaration": true,
     "types": []
   },
-  "include": ["**/*.ts"],
+  "include": [
+    "**/*.ts",
+    "src/generators/init/files/example-files/angular/example-stories/card.stories.ts__tmpl__"
+  ],
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

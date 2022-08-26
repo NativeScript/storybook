@@ -71,15 +71,15 @@ export function addAngularStorybookTask(tree: Tree, projectName: string) {
   const { ngBuildTarget } = findStorybookAndBuildTargetsAndCompiler(
     projectConfig.targets
   );
-  projectConfig.targets['storybook'] = {
-    executor: '@storybook/angular:start-storybook',
+  projectConfig.targets['storybook-ios'] = {
+    executor: '@nrwl/workspace:run-commands',
     options: {
-      port: 4400,
-      configDir: `${projectConfig.root}/.storybook`,
-      browserTarget: `${projectName}:${
-        ngBuildTarget ? 'build' : 'build-storybook'
-      }`,
-      compodoc: false,
+      commands: [
+        'STORYBOOK_NATIVE_LOCAL_EMULATOR=true STORYBOOK_TARGET_PLATFORM=ios yarn start-storybook -p 53743',
+        'ns run ios',
+      ],
+      cwd: `apps/${projectName}`,
+      parallel: true,
     },
     configurations: {
       ci: {
@@ -87,16 +87,15 @@ export function addAngularStorybookTask(tree: Tree, projectName: string) {
       },
     },
   };
-  projectConfig.targets['build-storybook'] = {
-    executor: '@storybook/angular:build-storybook',
-    outputs: ['{options.outputDir}'],
+  projectConfig.targets['storybook-android'] = {
+    executor: '@nrwl/workspace:run-commands',
     options: {
-      outputDir: joinPathFragments('dist/storybook', projectName),
-      configDir: `${projectConfig.root}/.storybook`,
-      browserTarget: `${projectName}:${
-        ngBuildTarget ? 'build' : 'build-storybook'
-      }`,
-      compodoc: false,
+      commands: [
+        'STORYBOOK_NATIVE_LOCAL_EMULATOR=true STORYBOOK_TARGET_PLATFORM=android yarn start-storybook -p 53743',
+        'ns run android',
+      ],
+      cwd: `apps/${projectName}`,
+      parallel: true,
     },
     configurations: {
       ci: {

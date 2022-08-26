@@ -36,9 +36,7 @@ function normalizeOptions(
     : name;
   const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
   const projectRoot = `${getWorkspaceLayout(tree).libsDir}/${projectDirectory}`;
-  const parsedTags = options.tags
-    ? options.tags.split(',').map((s) => s.trim())
-    : [];
+  const parsedTags = [];
 
   return {
     ...options,
@@ -49,30 +47,11 @@ function normalizeOptions(
   };
 }
 
-function updateProjectConfig(tree: Tree, options: NormalizedSchema) {
-  updateProjectConfiguration(tree, options.name, {
-    root: '',
-    targets: {
-      'storybook:ios': {
-        executor: '@nrwl/workspace:run-commands',
-        options: {
-          commands: [
-            'STORYBOOK_NATIVE_LOCAL_EMULATOR=true STORYBOOK_TARGET_PLATFORM=ios yarn start-storybook -p 53743',
-            'ns run ios',
-          ],
-          cwd: `apps/${options.name}`,
-          parallel: true,
-        },
-      },
-    },
-  });
-}
-
-function addFiles(tree: Tree, options: NormalizedSchema) {
+function addStorybookConfigFiles(tree: Tree, options: NormalizedSchema) {
   const templatePath = path.join(
     __dirname,
     options.uiFramework === '@storybook/angular'
-      ? './files/project-files-ng'
+      ? './files/project-files/angular'
       : './files/project-files'
   );
   const templateOptions = {
@@ -82,7 +61,6 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
     template: '',
     tmpl: '',
   };
-  console.log('templateOptions', templateOptions);
   const directory = options.directory ? `${options.directory}/` : '';
   const appName = options.name;
   generateFiles(tree, templatePath, options.projectRoot, templateOptions);
@@ -90,6 +68,25 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
   //   ...(options as any),
   //   ...getDefaultTemplateOptions(),
   // })
+}
+
+function addExampleFiles(tree: Tree, options: NormalizedSchema) {
+  const templatePath = path.join(
+    __dirname,
+    options.uiFramework === '@storybook/angular'
+      ? './files/example-files/angular'
+      : './files/example-files'
+  );
+  const templateOptions = {
+    ...options,
+    ...names(options.name),
+    offsetFromRoot: offsetFromRoot(options.projectRoot),
+    template: '',
+    tmpl: '',
+  };
+  const directory = options.directory ? `${options.directory}/` : '';
+  const appName = options.name;
+  generateFiles(tree, templatePath, options.projectRoot, templateOptions);
 }
 
 function checkDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
@@ -134,7 +131,10 @@ export default async function (tree: Tree, options: InitGeneratorSchema) {
 
   const tasks: GeneratorCallback[] = [];
 
-  addFiles(tree, normalizedOptions);
+  addStorybookConfigFiles(tree, normalizedOptions);
+  if (normalizedOptions.includeExample) {
+    addExampleFiles(tree, normalizedOptions);
+  }
 
   checkDependenciesInstalled(tree, normalizedOptions);
   if (normalizedOptions.uiFramework === '@storybook/angular') {

@@ -1,6 +1,6 @@
 export interface InitGeneratorSchema {
   name: string;
   uiFramework: '@storybook/angular' | '@storybook/vue';
-  tags?: string;
+  includeExample: boolean;
   directory?: string;
 }
