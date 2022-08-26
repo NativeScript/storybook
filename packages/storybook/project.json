@@ -5,7 +5,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/storybook",
         "main": "packages/storybook/src/index.ts",
@@ -37,7 +39,9 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
         "lintFilePatterns": [
           "packages/storybook/**/*.ts",
@@ -49,7 +53,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/storybook"],
+      "outputs": [
+        "coverage/packages/storybook"
+      ],
       "options": {
         "jestConfig": "packages/storybook/jest.config.ts",
         "passWithNoTests": true

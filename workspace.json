@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "storybook": "packages/storybook",
-    "storybook-e2e": "e2e/storybook-e2e"
+    "storybook-e2e": "e2e/storybook-e2e",
+    "nativescript-demo-angular": "apps/nativescript-demo-angular"
   }
 }
