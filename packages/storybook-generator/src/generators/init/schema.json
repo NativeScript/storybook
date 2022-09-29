@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "Init",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "aliases": ["project", "projectName"],
+      "description": "Project for which to generate Storybook configuration.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "For which project do you want to generate Storybook configuration?",
+      "x-dropdown": "projects"
+    },
+    "uiFramework": {
+      "type": "string",
+      "description": "Storybook UI Framework to use.",
+      "enum": ["@storybook/angular", "@storybook/vue"],
+      "x-prompt": "What UI framework plugin should storybook use?"
+    },
+    "includeExample": {
+      "type": "boolean",
+      "description": "Generate an example component with storybook",
+      "x-prompt": "Do you want to generate an example component with storybook?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "A directory where the project is placed",
+      "alias": "d"
+    }
+  },
+  "required": ["name", "uiFramework", "includeExample"]
+}
