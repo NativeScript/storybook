@@ -107,9 +107,6 @@ function checkDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
     devDependencies['@storybook/manager-webpack5'] = storybookVersion;
     devDependencies['webpack'] = webpack5Version;
     devDependencies['@storybook/addon-controls'] = storybookVersion;
-    devDependencies['@storybook/angular'] = storybookVersion;
-    devDependencies['@storybook/builder-webpack5'] = storybookVersion;
-    devDependencies['@storybook/manager-webpack5'] = storybookVersion;
     devDependencies['@storybook/native'] = storybookVersion;
     devDependencies['@storybook/native-addon'] = storybookVersion;
     devDependencies['@storybook/native-components'] = storybookVersion;
