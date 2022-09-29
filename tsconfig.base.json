@@ -1,21 +1,27 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
+    "noEmitHelpers": true,
+    "target": "es2017",
     "module": "esnext",
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "plugins": [
+      {
+        "transform": "@nativescript/webpack/dist/transformers/NativeClass",
+        "type": "raw"
+      }
+    ],
     "paths": {
-      "@nativescript/storybook": ["packages/storybook/src/index.ts"]
+      "@demo/shared": ["tools/demo/index.ts"],
+      "@nativescript/storybook-device": ["packages/storybook-device/index.d.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

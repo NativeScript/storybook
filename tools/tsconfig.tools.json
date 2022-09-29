@@ -2,12 +2,11 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../dist/out-tsc/tools",
-    "allowJs": true,
     "rootDir": ".",
     "module": "commonjs",
     "target": "es5",
-    "types": ["node"],
-    "importHelpers": false
+    "types": ["node"]
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["demo"]
 }

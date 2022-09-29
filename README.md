@@ -1,94 +1,79 @@
+**=== IMPORTANT**
 
+# :rotating_light: Important - read first!
 
-# Nativescript
+**Use this template on GitHub:**
+1. Hit the "Use this template" button
+2. Follow GitHub instructions (set repo name, visibility, description) & clone your new repo
+3. Setup workspace: `npm run setup`
+4. Configure your npm scope: `npm run config`
 
-This project was generated using [Nx](https://nx.dev).
+**Use this template outside of GitHub:**
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+1. Download a zip of this repo
+2. Unzip and name the folder appropriately (perhaps the name of the npm scope you intend to manage here)
+3. Setup workspace: `npm run setup`
+4. Configure your npm scope: `npm run config`
 
-🔎 **Smart, Fast and Extensible Build System**
+---
 
-## Adding capabilities to your workspace
+# @nativescript/\* plugins
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+```
+npm run setup
+npm start
+```
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+- [@nativescript/storybook-device](packages/storybook-device/README.md)
 
-Below are our core plugins:
+# How to use?
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+This workspace manages the suite of plugins listed above. 
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+In general, when in doubt with what to do, just `npm start`.
 
-## Generate an application
+## How to add a new package to workspace?
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+```
+npm run add
+```
 
-> You can use any of the plugins above to generate applications as well.
+At the prompt, enter the name of the new package.
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+- This adds a plugin harness in `packages` with the necessary boilerplate to just start developing
+- Updates all demo app flavors to support demoing the new package
+- Adds shared code in `tools/demo` where you can write demo code **once** and share across all demo flavors
+- Updates build tooling to support the new package
+- Updates the `npm start` interactive display
+- Updates the README here to list the new package
 
-## Generate a library
+## How to add Angular compatibility to a package
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+```
+npm run add-angular
+```
 
-> You can also use any of the plugins above to generate libraries as well.
+At the prompt, enter the name of the package to add an `angular` folder to it with the necessary boilerplate to provide Angular support to the package.
 
-Libraries are shareable across libraries and applications. They can be imported from `@nativescript/mylib`.
+## How to focus on just 1 package to develop in isolation
 
-## Development server
+```
+npm start
+```
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+- Choose the focus commands for the package you wish to focus on and hit enter.
+- All the demo app's will be updated to isolate that 1 package and for supported IDE's (currently VS Code), the source code will also become isolated in the workspace.
 
-## Code scaffolding
+Note: *good to always clean the demo you plan to run after focusing. (You can clean any demo from `npm start` as well)*
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+## How to publish packages?
 
-## Build
+```
+npm run publish-packages
+```
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+- You will be prompted for the package names to publish. Leaving blank and hitting enter will publish them all.
+- You will then be prompted for the version to use. Leaving blank will auto bump the patch version (it also handles prerelease types like alpha, beta, rc, etc. - It even auto tags the corresponding prelease type on npm).
+- You will then be given a brief sanity check 🧠😊
 
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+<h3 align="center">Made with ❤️</h3>

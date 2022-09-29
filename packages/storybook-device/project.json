@@ -1,0 +1,64 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/storybook-device",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/storybook-device",
+        "tsConfig": "packages/storybook-device/tsconfig.json",
+        "packageJson": "packages/storybook-device/package.json",
+        "main": "packages/storybook-device/index.d.ts",
+        "assets": [
+          "packages/storybook-device/*.md",
+          "packages/storybook-device/index.d.ts",
+          "LICENSE",
+          {
+            "glob": "**/*",
+            "input": "packages/storybook-device/platforms/",
+            "output": "./platforms/"
+          }
+        ],
+        "dependsOn": [
+          {
+            "target": "build.all",
+            "projects": "dependencies"
+          }
+        ]
+      }
+    },
+    "build.all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["node tools/scripts/build-finish.ts storybook-device"],
+        "parallel": false
+      },
+      "outputs": ["dist/packages/storybook-device"],
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        },
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "focus": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx g @nativescript/plugin-tools:focus-packages storybook-device"],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/storybook-device/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
