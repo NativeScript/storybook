@@ -5,7 +5,8 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
-    "@nativescript/storybook-device": "file:../../packages/storybook-device"
+    "@nativescript/storybook-device": "file:../../packages/storybook-device",
+    "@nativescript/storybook-web": "file:../../packages/storybook-web"
   },
   "devDependencies": {
     "@nativescript/android": "~8.3.0",

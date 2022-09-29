@@ -9,5 +9,8 @@ export class HomeComponent {
     {
       name: 'storybook-device',
     },
+    {
+      name: 'storybook-web',
+    },
   ];
 }

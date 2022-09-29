@@ -3,7 +3,8 @@
   "projects": {
     "demo": "apps/demo",
     "demo-angular": "apps/demo-angular",
-    "storybook-device": "packages/storybook-device"
+    "storybook-device": "packages/storybook-device",
+    "storybook-web": "packages/storybook-web"
   },
   "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

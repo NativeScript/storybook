@@ -4,7 +4,6 @@ import { UrlUtil } from './utils/url.util';
 
 export class StorybookDevice extends StorybookDeviceCommon {
   public static init(): void {
-    console.log('-init-');
     @NativeClass()
     class UIApplicationDelegateImpl extends UIResponder implements UIApplicationDelegate {
       public static ObjCProtocols = [UIApplicationDelegate];

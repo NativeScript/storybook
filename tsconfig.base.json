@@ -21,7 +21,8 @@
     ],
     "paths": {
       "@demo/shared": ["tools/demo/index.ts"],
-      "@nativescript/storybook-device": ["packages/storybook-device/index.d.ts"]
+      "@nativescript/storybook-device": ["packages/storybook-device/index.d.ts"],
+      "@nativescript/storybook-web": ["packages/storybook-web/index.d.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -68,6 +68,13 @@ module.exports = {
           description: '@nativescript/storybook-device: Build',
         },
       },
+      // @nativescript/storybook-web
+      'storybook-web': {
+        build: {
+          script: 'nx run storybook-web:build.all',
+          description: '@nativescript/storybook-web: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -81,6 +88,10 @@ module.exports = {
       'storybook-device': {
         script: 'nx run storybook-device:focus',
         description: 'Focus on @nativescript/storybook-device',
+      },
+      'storybook-web': {
+        script: 'nx run storybook-web:focus',
+        description: 'Focus on @nativescript/storybook-web',
       },
       reset: {
         script: 'nx g @nativescript/plugin-tools:focus-packages',

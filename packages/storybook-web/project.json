@@ -1,0 +1,64 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/storybook-web",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/storybook-web",
+        "tsConfig": "packages/storybook-web/tsconfig.json",
+        "packageJson": "packages/storybook-web/package.json",
+        "main": "packages/storybook-web/index.d.ts",
+        "assets": [
+          "packages/storybook-web/*.md",
+          "packages/storybook-web/index.d.ts",
+          "LICENSE",
+          {
+            "glob": "**/*",
+            "input": "packages/storybook-web/platforms/",
+            "output": "./platforms/"
+          }
+        ],
+        "dependsOn": [
+          {
+            "target": "build.all",
+            "projects": "dependencies"
+          }
+        ]
+      }
+    },
+    "build.all": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["node tools/scripts/build-finish.ts storybook-web"],
+        "parallel": false
+      },
+      "outputs": ["dist/packages/storybook-web"],
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        },
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "focus": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx g @nativescript/plugin-tools:focus-packages storybook-web"],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/storybook-web/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
