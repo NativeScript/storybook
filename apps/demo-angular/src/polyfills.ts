@@ -18,3 +18,6 @@ import 'zone.js';
 
 // Add NativeScript specific Zone JS patches
 import '@nativescript/zone-js';
+
+(<any>global).process = global.process ?? {};
+global.process.env = global.process.env ?? {};

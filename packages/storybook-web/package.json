@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Add a plugin description",
   "main": "index",
-  "typings": "index.d.ts",
+  "types": "index.d.ts",
   "nativescript": {
     "platforms": {
       "ios": "6.0.0",
