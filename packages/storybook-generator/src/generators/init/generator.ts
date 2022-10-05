@@ -1,7 +1,7 @@
 import { addProjectConfiguration, formatFiles, generateFiles, getWorkspaceLayout, names, offsetFromRoot, Tree, readJson, joinPathFragments, updateJson, addDependenciesToPackageJson, updateProjectConfiguration, GeneratorCallback } from '@nrwl/devkit';
 import * as path from 'path';
 import { isFramework } from '../../utils/utilities';
-import { storybookVersion, webpack5Version } from '../../utils/versions';
+import { nativescriptStorybookVersion, storybookVersion, webpack5Version } from '../../utils/versions';
 import { InitGeneratorSchema } from './schema';
 import { addAngularStorybookTask } from './util-functions';
 
@@ -82,6 +82,10 @@ function checkDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
     devDependencies['@storybook/native-addon'] = storybookVersion;
     devDependencies['@storybook/native-components'] = storybookVersion;
     devDependencies['@storybook/native-dev-middleware'] = storybookVersion;
+
+    // Nativescript specific storybook dependencies
+    devDependencies['@nativescript/storybook-device'] = nativescriptStorybookVersion;
+    devDependencies['@nativescript/storybook-web'] = nativescriptStorybookVersion;
 
     if (!packageJson.dependencies['@angular/forms'] && !packageJson.devDependencies['@angular/forms']) {
       devDependencies['@angular/forms'] = '*';
