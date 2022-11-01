@@ -11,3 +11,4 @@ export const reactNativeStorybookLoader = '^2.0.5';
 export const storybookSwcAddonVersion = '^1.1.7';
 export const storybookNextAddonVersion = '^1.6.6';
 export const nativescriptStorybookVersion = '^1.0.0';
+export const storybookNativeVersion = '^2.2.2';

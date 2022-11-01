@@ -98,19 +98,9 @@ export function configureTsProjectConfig(tree: Tree, schema: InitGeneratorSchema
     tsConfigContent = readJson<TsConfig>(tree, tsConfigPath);
   }
 
-  //   if (
-  //     !tsConfigContent?.exclude?.includes('**/*.stories.ts') &&
-  //     !tsConfigContent?.exclude?.includes('**/*.stories.js')
-  //   ) {
-  //     tsConfigContent.exclude = [
-  //       ...(tsConfigContent.exclude || []),
-  //       '**/*.stories.ts',
-  //       '**/*.stories.js',
-  //       ...(isFramework('react', schema) || isFramework('react-native', schema)
-  //         ? ['**/*.stories.jsx', '**/*.stories.tsx']
-  //         : []),
-  //     ];
-  //   }
+  if (!tsConfigContent?.exclude?.includes('**/*.stories.ts')) {
+    tsConfigContent.exclude = [...(tsConfigContent.exclude || []), '**/*.stories.ts'];
+  }
 
   writeJson(tree, tsConfigPath, tsConfigContent);
 }

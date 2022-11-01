@@ -55,6 +55,32 @@
       "options": {
         "lintFilePatterns": ["apps/demo-angular/**/*.ts"]
       }
+    },
+    "storybook-ios": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["STORYBOOK_NATIVE_LOCAL_EMULATOR=true STORYBOOK_TARGET_PLATFORM=ios yarn start-storybook -p 53743", "ns run ios"],
+        "cwd": "apps/demo-angular",
+        "parallel": true
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "storybook-android": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["STORYBOOK_NATIVE_LOCAL_EMULATOR=true STORYBOOK_TARGET_PLATFORM=android yarn start-storybook -p 53743", "ns run android"],
+        "cwd": "apps/demo-angular",
+        "parallel": true
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
     }
   }
 }

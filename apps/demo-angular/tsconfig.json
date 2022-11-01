@@ -7,5 +7,6 @@
     }
   },
   "files": ["./references.d.ts", "./src/main.ts", "./src/polyfills.ts"],
-  "include": ["../../packages/**/references.d.ts"]
+  "include": ["../../packages/**/references.d.ts"],
+  "exclude": ["**/*.stories.ts"]
 }

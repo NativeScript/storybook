@@ -52,6 +52,14 @@ module.exports = {
           script: 'nx run demo-angular:android',
           description: '⚆  Run Android  🤖',
         },
+        'storybook-ios': {
+          script: 'nx run demo-angular:storybook-ios',
+          description: '⚆  Run Storybook iOS  ',
+        },
+        'storybook-android': {
+          script: 'nx run demo-angular:storybook-android',
+          description: '⚆  Run Storybook Android  🤖',
+        },
       },
     },
     '⚙️': {

@@ -1,9 +1,9 @@
 import { addProjectConfiguration, formatFiles, generateFiles, getWorkspaceLayout, names, offsetFromRoot, Tree, readJson, joinPathFragments, updateJson, addDependenciesToPackageJson, updateProjectConfiguration, GeneratorCallback } from '@nrwl/devkit';
 import * as path from 'path';
 import { isFramework } from '../../utils/utilities';
-import { nativescriptStorybookVersion, storybookVersion, webpack5Version } from '../../utils/versions';
+import { nativescriptStorybookVersion, storybookNativeVersion, storybookVersion, webpack5Version } from '../../utils/versions';
 import { InitGeneratorSchema } from './schema';
-import { addAngularStorybookTask } from './util-functions';
+import { addAngularStorybookTask, configureTsProjectConfig } from './util-functions';
 
 interface NormalizedSchema extends InitGeneratorSchema {
   projectName: string;
@@ -16,7 +16,7 @@ function normalizeOptions(tree: Tree, options: InitGeneratorSchema): NormalizedS
   const name = names(options.name).fileName;
   const projectDirectory = options.directory ? `${names(options.directory).fileName}/${name}` : name;
   const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
-  const projectRoot = `${getWorkspaceLayout(tree).libsDir}/${projectDirectory}`;
+  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/${projectDirectory}`;
   const parsedTags = [];
 
   return {
@@ -37,13 +37,7 @@ function addStorybookConfigFiles(tree: Tree, options: NormalizedSchema) {
     template: '',
     tmpl: '',
   };
-  const directory = options.directory ? `${options.directory}/` : '';
-  const appName = options.name;
-  generateFiles(tree, templatePath, options.projectRoot, templateOptions);
-  // generateFiles(tree, joinPathFragments(__dirname, `files${framework ? '_' + framework : ''}${extra ? '_' + extra : ''}`), `apps/${directory}${appName}`, {
-  //   ...(options as any),
-  //   ...getDefaultTemplateOptions(),
-  // })
+  generateFiles(tree, templatePath, './', templateOptions);
 }
 
 function addExampleFiles(tree: Tree, options: NormalizedSchema) {
@@ -71,6 +65,7 @@ function checkDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
   // devDependencies['@nrwl/storybook'] = nxVersion;
   devDependencies['@storybook/core-server'] = storybookVersion;
   devDependencies['@storybook/addon-essentials'] = storybookVersion;
+  devDependencies['@storybook/cli'] = storybookVersion;
 
   if (isFramework('angular', schema)) {
     devDependencies['@storybook/angular'] = storybookVersion;
@@ -78,10 +73,10 @@ function checkDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
     devDependencies['@storybook/manager-webpack5'] = storybookVersion;
     devDependencies['webpack'] = webpack5Version;
     devDependencies['@storybook/addon-controls'] = storybookVersion;
-    devDependencies['@storybook/native'] = storybookVersion;
-    devDependencies['@storybook/native-addon'] = storybookVersion;
-    devDependencies['@storybook/native-components'] = storybookVersion;
-    devDependencies['@storybook/native-dev-middleware'] = storybookVersion;
+    devDependencies['@storybook/native'] = storybookNativeVersion;
+    devDependencies['@storybook/native-addon'] = storybookNativeVersion;
+    devDependencies['@storybook/native-components'] = storybookNativeVersion;
+    devDependencies['@storybook/native-dev-middleware'] = storybookNativeVersion;
 
     // Nativescript specific storybook dependencies
     devDependencies['@nativescript/storybook-device'] = nativescriptStorybookVersion;
@@ -95,6 +90,41 @@ function checkDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
   return addDependenciesToPackageJson(host, dependencies, devDependencies);
 }
 
+function checkAppDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
+  const appPackageJson = readJson(host, `${schema.projectRoot}/package.json`);
+  const devDependencies = {};
+  const dependencies = {};
+  appPackageJson.dependencies = appPackageJson.dependencies || {};
+  appPackageJson.devDependencices = appPackageJson.devDependencices || {};
+
+  // base deps
+  // devDependencies['@nrwl/storybook'] = nxVersion;
+  devDependencies['@storybook/core-server'] = storybookVersion;
+  devDependencies['@storybook/addon-essentials'] = storybookVersion;
+
+  if (isFramework('angular', schema)) {
+    devDependencies['@storybook/angular'] = storybookVersion;
+    devDependencies['@storybook/builder-webpack5'] = storybookVersion;
+    devDependencies['@storybook/manager-webpack5'] = storybookVersion;
+    devDependencies['webpack'] = webpack5Version;
+    devDependencies['@storybook/addon-controls'] = storybookVersion;
+    devDependencies['@storybook/native'] = storybookNativeVersion;
+    devDependencies['@storybook/native-addon'] = storybookNativeVersion;
+    devDependencies['@storybook/native-components'] = storybookNativeVersion;
+    devDependencies['@storybook/native-dev-middleware'] = storybookNativeVersion;
+
+    // Nativescript specific storybook dependencies
+    devDependencies['@nativescript/storybook-device'] = nativescriptStorybookVersion;
+    devDependencies['@nativescript/storybook-web'] = nativescriptStorybookVersion;
+
+    if (!appPackageJson.dependencies['@angular/forms'] && !appPackageJson.devDependencies['@angular/forms']) {
+      devDependencies['@angular/forms'] = '*';
+    }
+  }
+
+  return addDependenciesToPackageJson(host, dependencies, devDependencies, `${schema.projectRoot}/package.json`);
+}
+
 export default async function (tree: Tree, options: InitGeneratorSchema) {
   const normalizedOptions = normalizeOptions(tree, options);
 
@@ -106,8 +136,10 @@ export default async function (tree: Tree, options: InitGeneratorSchema) {
   }
 
   checkDependenciesInstalled(tree, normalizedOptions);
+  checkAppDependenciesInstalled(tree, normalizedOptions);
   if (normalizedOptions.uiFramework === '@storybook/angular') {
     addAngularStorybookTask(tree, normalizedOptions.name);
   }
+  configureTsProjectConfig(tree, normalizedOptions);
   await formatFiles(tree);
 }
