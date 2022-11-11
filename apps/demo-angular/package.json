@@ -5,13 +5,8 @@
   "description": "storybook sample",
   "license": "MIT",
   "private": true,
-  "workspaces": {
-    "nohoist": [
-      "@storybook/*"
-    ]
-  },
   "scripts": {
-    "start-storybook": "yarn start-storybook"
+    "start-storybook": "start-storybook -p 53743"
   },
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",

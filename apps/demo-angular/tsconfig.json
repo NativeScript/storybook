@@ -6,6 +6,6 @@
       "@demo/shared": ["tools/demo/index.ts"]
     }
   },
-  "files": ["./references.d.ts", "./src/main.ts", "./src/polyfills.ts"],
+  "files": ["./references.d.ts", "./src/main.ts", "./src/polyfills.ts", ".storybook/preview.ts"],
   "exclude": ["**/*.stories.ts"]
 }

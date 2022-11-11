@@ -5,7 +5,8 @@
   "scripts": {
     "start-storybook": "yarn start-storybook",
     "postinstall": "husky install && npx ts-patch install",
-    "setup": "npx rimraf node_modules package-lock.json dist tmp yarn.lock && yarn",
+    "setup": "npx rimraf node_modules package-lock.json dist tmp yarn.lock && yarn config set ignore-engines true && yarn",
+    "clean.all": "yarn setup && nx run-many --target=clean --all",
     "start": "nps",
     "add": "nx g @nativescript/plugin-tools:add-package",
     "add-angular": "nx g @nativescript/plugin-tools:add-angular",
@@ -16,12 +17,10 @@
     "add-demo": "nx g @nativescript/plugin-tools:add-demo"
   },
   "private": true,
-  "workspaces": [
-    "apps/demo-angular"
-  ],
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.0",
     "@angular/animations": "^14.2.0",
+    "@angular/cli": "^14.2.9",
     "@angular/common": "^14.2.0",
     "@angular/compiler": "^14.2.0",
     "@angular/compiler-cli": "^14.2.0",
@@ -87,6 +86,5 @@
     "**/*.{js,ts,scss,json,html}": [
       "npx prettier --write"
     ]
-  },
-  "dependencies": {}
+  }
 }
