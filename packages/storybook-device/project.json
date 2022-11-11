@@ -1,4 +1,5 @@
 {
+  "name": "storybook-device",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/storybook-device",
@@ -34,7 +35,7 @@
         "commands": ["node tools/scripts/build-finish.ts storybook-device"],
         "parallel": false
       },
-      "outputs": ["dist/packages/storybook-device"],
+      "outputs": ["{workspaceRoot}/dist/packages/storybook-device"],
       "dependsOn": [
         {
           "target": "build.all",

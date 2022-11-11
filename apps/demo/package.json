@@ -1,12 +1,13 @@
 {
   "main": "./src/app.ts",
+  "name": "demo",
   "description": "NativeScript Application",
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
-    "@nativescript/storybook-device": "file:../../packages/storybook-device",
-    "@nativescript/storybook-web": "file:../../packages/storybook-web"
+    "@nativescript/storybook-device": "file:../../dist/packages/storybook-device",
+    "@nativescript/storybook-web": "file:../../dist/packages/storybook-web"
   },
   "devDependencies": {
     "@nativescript/android": "~8.3.0",

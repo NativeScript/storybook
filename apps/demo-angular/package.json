@@ -1,5 +1,6 @@
 {
   "main": "./src/main.ts",
+  "name": "demo-angular",
   "version": "0.0.0",
   "description": "storybook sample",
   "license": "MIT",
@@ -18,7 +19,6 @@
     "@nativescript/storybook-web": "file:../../dist/packages/storybook-web"
   },
   "devDependencies": {
-    "@angular/forms": "*",
     "@nativescript/android": "~8.3.0",
     "@nativescript/ios": "~8.3.0",
     "@storybook/addon-controls": "~6.5.9",

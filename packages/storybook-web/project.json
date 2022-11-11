@@ -1,4 +1,5 @@
 {
+  "name": "storybook-web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/storybook-web",
@@ -34,7 +35,7 @@
         "commands": ["node tools/scripts/build-finish.ts storybook-web"],
         "parallel": false
       },
-      "outputs": ["dist/packages/storybook-web"],
+      "outputs": ["{workspaceRoot}/dist/packages/storybook-web"],
       "dependsOn": [
         {
           "target": "build.all",

@@ -45,7 +45,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/storybook-generator"],
+      "outputs": ["{workspaceRoot}/coverage/packages/storybook-generator"],
       "options": {
         "jestConfig": "packages/storybook-generator/jest.config.ts",
         "passWithNoTests": true
