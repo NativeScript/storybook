@@ -51,7 +51,7 @@ function addExampleFiles(tree: Tree, options: NormalizedSchema) {
   };
   const directory = options.directory ? `${options.directory}/` : '';
   const appName = options.name;
-  generateFiles(tree, templatePath, options.projectRoot, templateOptions);
+  generateFiles(tree, templatePath, `${options.projectRoot}/src`, templateOptions);
 }
 
 function checkDependenciesInstalled(host: Tree, schema: NormalizedSchema) {
