@@ -68,7 +68,13 @@
         "ci": {
           "quiet": true
         }
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        }
+      ]
     },
     "storybook-android": {
       "executor": "@nrwl/workspace:run-commands",
@@ -81,7 +87,13 @@
         "ci": {
           "quiet": true
         }
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        }
+      ]
     }
   }
 }
