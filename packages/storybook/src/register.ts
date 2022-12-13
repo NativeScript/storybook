@@ -73,4 +73,4 @@ const storyChange = debounce((story: any) => {
   } catch (err) {
     // ignore
   }
-}, 1000);
+}, 500);
