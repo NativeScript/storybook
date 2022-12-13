@@ -11,7 +11,9 @@
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
     "@nativescript/storybook-device": "file:../../dist/packages/storybook-device",
-    "@nativescript/storybook-web": "file:../../dist/packages/storybook-web"
+    "@nativescript/storybook-web": "file:../../dist/packages/storybook-web",
+    "@nativescript/storybook-generator": "file:../../dist/packages/storybook-generator",
+    "@nativescript/storybook": "file:../../dist/packages/storybook"
   },
   "devDependencies": {
     "@nativescript/android": "~8.3.0",

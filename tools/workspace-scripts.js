@@ -18,8 +18,8 @@ module.exports = {
     // demos
     apps: {
       '...Vanilla...': {
-        script: `npx cowsay "Nothing wrong with vanilla 🍦"`,
-        description: ` 🔻 Vanilla`,
+        script: 'npx cowsay "Nothing wrong with vanilla 🍦"',
+        description: ' 🔻 Vanilla',
       },
       demo: {
         clean: {
@@ -36,8 +36,8 @@ module.exports = {
         },
       },
       '...Angular...': {
-        script: `npx cowsay "Test all the Angles!"`,
-        description: ` 🔻 Angular`,
+        script: 'npx cowsay "Test all the Angles!"',
+        description: ' 🔻 Angular',
       },
       'demo-angular': {
         clean: {
@@ -52,16 +52,28 @@ module.exports = {
           script: 'nx run demo-angular:android',
           description: '⚆  Run Android  🤖',
         },
-        'storybook-ios': {
-          script: 'nx run demo-angular:storybook-ios',
-          description: '⚆  Run Storybook iOS  ',
+      },
+
+      '...Vue...': {
+        script: 'npx cowsay "You like the vue here..."',
+        description: ' 🔻 Vue',
+      },
+      'demo-vue': {
+        clean: {
+          script: 'nx run demo-vue:clean',
+          description: '⚆  Clean  🧹',
         },
-        'storybook-android': {
-          script: 'nx run demo-angular:storybook-android',
-          description: '⚆  Run Storybook Android  🤖',
+        ios: {
+          script: 'nx run demo-vue:ios',
+          description: '⚆  Run iOS  ',
+        },
+        android: {
+          script: 'nx run demo-vue:android',
+          description: '⚆  Run Android  🤖',
         },
       },
     },
+
     '⚙️': {
       script: `npx cowsay "@nativescript/* packages will keep your ⚙️ cranking"`,
       description: '_____________  @nativescript/*  _____________',
@@ -83,6 +95,13 @@ module.exports = {
           description: '@nativescript/storybook-web: Build',
         },
       },
+      // @nativescript/storybook
+      storybook: {
+        build: {
+          script: 'nx run storybook:build.all',
+          description: '@nativescript/storybook: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -100,6 +119,10 @@ module.exports = {
       'storybook-web': {
         script: 'nx run storybook-web:focus',
         description: 'Focus on @nativescript/storybook-web',
+      },
+      storybook: {
+        script: 'nx run storybook:focus',
+        description: 'Focus on @nativescript/storybook',
       },
       reset: {
         script: 'nx g @nativescript/plugin-tools:focus-packages',

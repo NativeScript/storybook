@@ -1,4 +1,6 @@
+- [@nativescript/storybook](packages/storybook/README.md)
 - [@nativescript/storybook-device](packages/storybook-device/README.md)
+- [@nativescript/storybook-generator](packages/storybook-generator/README.md)
 - [@nativescript/storybook-web](packages/storybook-web/README.md)
 
 # How to use?

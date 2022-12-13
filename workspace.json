@@ -6,7 +6,9 @@
     "storybook-device": "packages/storybook-device",
     "storybook-generator": "packages/storybook-generator",
     "storybook-generator-e2e": "apps/storybook-generator-e2e",
-    "storybook-web": "packages/storybook-web"
+    "storybook-web": "packages/storybook-web",
+    "demo-vue": "apps/demo-vue/",
+    "storybook": "packages/storybook"
   },
   "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

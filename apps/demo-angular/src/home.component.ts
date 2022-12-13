@@ -7,7 +7,13 @@ import { Component } from '@angular/core';
 export class HomeComponent {
   demos = [
     {
+      name: 'storybook',
+    },
+    {
       name: 'storybook-device',
+    },
+    {
+      name: 'storybook-generator',
     },
     {
       name: 'storybook-web',

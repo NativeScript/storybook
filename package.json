@@ -80,7 +80,8 @@
     "tty-browserify": "^0.0.1",
     "typescript": "~4.7.3",
     "webpack": "^5.64.0",
-    "zone.js": "~0.11.1"
+    "zone.js": "~0.11.1",
+    "vue": "~2.6.12"
   },
   "lint-staged": {
     "**/*.{js,ts,scss,json,html}": [
