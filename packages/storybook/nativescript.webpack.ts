@@ -7,7 +7,7 @@ const { resolve } = require('path');
  * @param {typeof import("@nativescript/webpack")} webpack
  */
 module.exports = (webpack) => {
-  const sbEntryPath = resolve(__dirname, './device/entry.ts');
+  const sbEntryPath = resolve(__dirname, './device/entry');
 
   webpack.chainWebpack((config, env) => {
     /* prettier-ignore */
@@ -20,6 +20,11 @@ module.exports = (webpack) => {
         .add(sbEntryPath);
 
       config.module.rule("bundle").test(webpack.Utils.project.getProjectFilePath(sbEntryPath));
+
+      // allows triggering HMR from within node_modules where our custom entry is located at.
+      config.set('snapshot', {
+        managedPaths: [],
+      });
 
       if (webpack.Utils.platform.getPlatformName() === "android") {
         config

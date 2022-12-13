@@ -17,10 +17,13 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait: number, imm
 
 addons.register('NATIVESCRIPT', () => {
   let isListening = false;
+
   addons.add('STORYCHANGELISTENER', {
     title: 'STORYCHANGELISTENER',
     type: types.TOOLEXTRA,
     render() {
+      // const [args] = useArgs()
+      // console.log(args);
       if (!isListening) {
         listenToStoryChange();
         isListening = true;
@@ -59,11 +62,12 @@ const storyChange = debounce((story: any) => {
   console.log('story change', story);
 
   try {
-    fetch('http://localhost:53740/', {
+    fetch('/nativescript/changeStory', {
       method: 'POST',
-      body: JSON.stringify({
-        story,
-      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(story),
     });
     // controller.openDeepLink(newAppUrl);
   } catch (err) {

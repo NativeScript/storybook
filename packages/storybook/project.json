@@ -19,6 +19,11 @@
             "glob": "**/*",
             "input": "packages/storybook/platforms/",
             "output": "./platforms/"
+          },
+          {
+            "glob": "**/*",
+            "input": "packages/storybook/device",
+            "output": "./device"
           }
         ],
         "dependsOn": [

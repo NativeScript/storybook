@@ -42,7 +42,7 @@ const storiesMeta = new Vue({
   },
 });
 
-const stories = require.context('../', true, /\.stories\.js$/);
+const stories = require.context('@/', true, /\.stories\.js$/);
 
 stories.keys().forEach((key: string) => {
   console.log('STORY:', key);

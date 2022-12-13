@@ -3,8 +3,8 @@
 import { currentStory } from './currentStory';
 
 if (module.hot) {
-  module.hot.accept('./current.js', () => {
-    _cb?.(currentStory.story);
+  module.hot.accept('./currentStory', () => {
+    _cb?.(currentStory);
   });
 }
 
@@ -14,5 +14,5 @@ export const onStoryChange = (cb: any) => {
 };
 
 export function getCurrentStory() {
-  return currentStory.story;
+  return currentStory;
 }
