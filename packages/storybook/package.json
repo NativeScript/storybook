@@ -2,7 +2,7 @@
   "name": "@nativescript/storybook",
   "version": "1.0.0",
   "description": "Add a plugin description",
-  "main": "preset.js",
+  "main": "index.js",
   "nativescript": {
     "platforms": {
       "ios": "6.0.0",
