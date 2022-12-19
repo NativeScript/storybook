@@ -1,13 +1,17 @@
 const { IgnorePlugin } = require('webpack');
 const { resolve } = require('path');
-/**
- * This optionally provides typehints
- * this requires "@nativescript/webpack" to be a dependency (dev)
- *
- * @param {typeof import("@nativescript/webpack")} webpack
- */
-module.exports = (webpack) => {
-  const sbEntryPath = resolve(__dirname, './device/entry');
+
+import type NSWebpack from '@nativescript/webpack';
+module.exports = (webpack: typeof NSWebpack) => {
+  // todo: have a default entry that notes the selected flavor is unsupported or something
+  let sbEntryPath = '';
+
+  const flavorName = webpack.Utils.flavor.determineProjectFlavor();
+
+  if (flavorName && ['vue', 'angular'].includes(flavorName)) {
+    // supported flavor, resolve entry path...
+    sbEntryPath = resolve(__dirname, `./device/${flavorName}/entry`);
+  }
 
   webpack.chainWebpack((config, env) => {
     /* prettier-ignore */
