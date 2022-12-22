@@ -29,15 +29,23 @@ new Vue({
         console.warn('failed to switch story, story metadata not found?');
         return;
       }
-      const meta = storiesMeta.get(storyId);
+      const story = storiesMeta.get(storyId);
+      const _args = {
+        ...story.args,
+        ...args,
+      };
+
+      let component;
+      if (story.factory) {
+        component = story.factory(_args, story.meta);
+      } else {
+        component = story.component;
+      }
 
       this.currentComponent = {
-        id: meta.id,
-        component: meta.component,
-        args: {
-          ...meta.args,
-          ...args,
-        },
+        id: story.id,
+        component,
+        args: _args,
       };
     },
   },

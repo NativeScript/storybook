@@ -21,8 +21,10 @@ storiesCtx.keys().forEach((key: string) => {
   storiesInFile.forEach((story: any) => {
     storiesMeta.set(story.id, {
       id: story.id,
+      meta: storyMeta,
       component: storyMeta.component,
       args: data[story.name].args,
+      factory: data[story.name],
     });
   });
 });
