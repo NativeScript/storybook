@@ -3,6 +3,26 @@
   "version": "1.0.0",
   "description": "Add a plugin description",
   "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    ".": {
+      "node": "./index.js",
+      "require": "./index.js",
+      "import": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./manager": {
+      "require": "./src/register.js",
+      "import": "./src/register.js",
+      "types": "./src/register.d.ts"
+    },
+    "./register": {
+      "require": "./src/register.js",
+      "import": "./src/register.js",
+      "types": "./src/register.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "nativescript": {
     "platforms": {
       "ios": "6.0.0",

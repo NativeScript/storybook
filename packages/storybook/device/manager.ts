@@ -13,6 +13,6 @@ export const onStoryChange = (cb: any) => {
   _cb = cb;
 };
 
-export function getCurrentStory() {
+export function getCurrentStory(): any {
   return currentStory;
 }
