@@ -105,14 +105,14 @@ function renderChange(newStory = getCurrentStory()) {
     sbRender.storyId = storyId;
     const meta = storiesMeta.get(storyId);
 
-    console.log('meta.component:', meta.component);
+    const parameters = {
+      ...meta.args,
+      ...args,
+    };
     sbRender.render({
       storyFnAngular: {},
       component: meta?.component,
-      parameters: {
-        ...meta.args,
-        ...args,
-      },
+      parameters,
     });
   } else {
     storiesMeta.forEach((v, k) => {

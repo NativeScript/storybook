@@ -3,7 +3,9 @@
 import { currentStory } from './currentStory';
 
 if (module.hot) {
+  console.log('hmr module.hot:', module.hot);
   module.hot.accept('./currentStory', () => {
+    console.log('currentstory change!', currentStory);
     _cb?.(currentStory);
   });
 }
