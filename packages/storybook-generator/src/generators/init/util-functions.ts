@@ -49,7 +49,7 @@ export function addAngularStorybookTask(tree: Tree, projectName: string) {
   const projectConfig = readProjectConfiguration(tree, projectName);
   const { ngBuildTarget } = findStorybookAndBuildTargetsAndCompiler(projectConfig.targets);
   projectConfig.targets['storybook-ios'] = {
-    executor: '@nrwl/workspace:run-commands',
+    executor: 'nx:run-commands',
     options: {
       commands: ['STORYBOOK_NATIVE_LOCAL_EMULATOR=true STORYBOOK_TARGET_PLATFORM=ios yarn start-storybook -p 53743', 'ns run ios'],
       cwd: `apps/${projectName}`,
@@ -62,7 +62,7 @@ export function addAngularStorybookTask(tree: Tree, projectName: string) {
     },
   };
   projectConfig.targets['storybook-android'] = {
-    executor: '@nrwl/workspace:run-commands',
+    executor: 'nx:run-commands',
     options: {
       commands: ['STORYBOOK_NATIVE_LOCAL_EMULATOR=true STORYBOOK_TARGET_PLATFORM=android yarn start-storybook -p 53743', 'ns run android'],
       cwd: `apps/${projectName}`,

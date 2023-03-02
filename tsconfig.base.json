@@ -7,9 +7,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noEmitHelpers": true,
-    "target": "es2017",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ESNext", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
@@ -21,10 +21,10 @@
     ],
     "paths": {
       "@demo/shared": ["tools/demo/index.ts"],
+      "@nativescript/storybook": ["packages/storybook/index.d.ts"],
       "@nativescript/storybook-device": ["packages/storybook-device/index.d.ts"],
       "@nativescript/storybook-generator": ["packages/storybook-generator/src/index.ts"],
-      "@nativescript/storybook-web": ["packages/storybook-web/index.d.ts"],
-      "@nativescript/storybook": ["packages/storybook/index.d.ts"]
+      "@nativescript/storybook-web": ["packages/storybook-web/index.d.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

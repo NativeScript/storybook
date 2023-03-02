@@ -25,11 +25,14 @@
     },
     "build": {
       "inputs": ["production", "^production"]
+    },
+    "lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
     }
   },
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": ["{workspaceRoot}/workspace.json", "{workspaceRoot}/tsconfig.base.json", "{workspaceRoot}/tslint.json", "{workspaceRoot}/nx.json"],
-    "production": ["default", "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)", "!{projectRoot}/tsconfig.spec.json", "!{projectRoot}/jest.config.[jt]s"]
+    "production": ["default", "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)", "!{projectRoot}/tsconfig.spec.json", "!{projectRoot}/jest.config.[jt]s", "!{projectRoot}/.eslintrc.json"]
   }
 }
