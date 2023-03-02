@@ -19,15 +19,16 @@ import 'zone.js';
 // Add NativeScript specific Zone JS patches
 import '@nativescript/zone-js';
 
-import { AppHostView, APP_ROOT_VIEW, platformNativeScript } from '@nativescript/angular';
+import { AppHostView, APP_ROOT_VIEW, NativeScriptModule, platformNativeScript, runNativeScriptAngularApp } from '@nativescript/angular';
 import '@angular/compiler';
 
 import { Application, GridLayout } from '@nativescript/core';
 import { BehaviorSubject } from 'rxjs';
 import { getCurrentStory, onStoryChange } from '../manager';
-import { createStorybookModule, getStorybookModuleMetadata } from './StorybookModule';
 import { ICollection, Parameters, StoryFnAngularReturnType } from './types';
 import { storiesMeta } from '../storyDiscovery';
+import { getApplication } from './StorybookModule';
+import { NgModule } from '@angular/core';
 
 class StorybookRender {
   storyId: string;
@@ -40,9 +41,15 @@ class StorybookRender {
 
   async render({ storyFnAngular, forced, parameters, component, targetDOMNode }: { storyFnAngular: StoryFnAngularReturnType; forced?: boolean; component?: any; parameters: Parameters; targetDOMNode?: HTMLElement }) {
     const targetSelector = `${this.generateTargetSelectorFromStoryId()}`;
+    console.log('targetSelector:', targetSelector);
+    const application = getApplication({
+      storyFnAngular,
+      component,
+      targetSelector,
+    });
 
-    const newStoryProps$ = new BehaviorSubject<ICollection>(storyFnAngular.props!);
-    const moduleMetadata = getStorybookModuleMetadata({ storyFnAngular, component, targetSelector }, newStoryProps$);
+    // const newStoryProps$ = new BehaviorSubject<ICollection>(storyFnAngular.props!);
+    // const moduleMetadata = getStorybookModuleMetadata({ storyFnAngular, component, targetSelector }, newStoryProps$);
 
     //   if (
     //     !this.fullRendererRequired({
@@ -65,8 +72,14 @@ class StorybookRender {
 
     // this.initAngularRootElement(targetDOMNode, targetSelector);
 
+    @NgModule({
+      imports: [NativeScriptModule],
+      bootstrap: [<any>application],
+    })
+    class StorybookModule {}
+
     try {
-      const module = await platformNativeScript().bootstrapModule(createStorybookModule(moduleMetadata), parameters?.bootstrapModuleOptions ?? undefined);
+      const module = await platformNativeScript().bootstrapModule(StorybookModule);
       const view = module.injector.get(APP_ROOT_VIEW);
       const newRoot = view instanceof AppHostView ? view.content : view;
       Application.resetRootView({
