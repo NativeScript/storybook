@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start-storybook": "start-storybook -p 53743"
+    "start-storybook": "start-storybook -p 53743",
+    "start": "storybook dev"
   },
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
@@ -16,7 +17,7 @@
     "@nativescript/storybook-angular": "file:../../dist/packages/storybook-angular"
   },
   "devDependencies": {
-    "@nativescript/android": "~8.4.0",
-    "@nativescript/ios": "alpha"
+    "@nativescript/android": "~8.5.0",
+    "@nativescript/ios": "~8.5.0"
   }
 }

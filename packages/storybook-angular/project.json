@@ -13,7 +13,31 @@
         "packageJson": "packages/storybook-angular/package.json",
         "main": "packages/storybook-angular/src/index.ts",
         "assets": ["packages/storybook-angular/*.md"]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "build.all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["node tools/scripts/build-finish.ts storybook-angular"],
+        "parallel": false
+      },
+      "outputs": ["{workspaceRoot}/dist/packages/storybook-angular"],
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        },
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
