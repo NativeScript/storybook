@@ -37,18 +37,18 @@ module.exports = (webpack: typeof NSWebpack) => {
           .add("@nativescript/core/ui/frame/activity");
       }
     } else {
-      config.plugin("IgnorePlugin|storybook").use(IgnorePlugin, [
-        {
-          checkResource: (resource, context) => {
-            if (context === webpack.Utils.platform.getEntryDirPath()) {
-              if (/\.stories\.(ts|js)$/.test(resource)) {
-                return true;
-              }
-            }
-            return false;
-          },
-        },
-      ]);
+      // config.plugin("IgnorePlugin|storybook").use(IgnorePlugin, [
+      //   {
+      //     checkResource: (resource, context) => {
+      //       if (context === webpack.Utils.platform.getEntryDirPath()) {
+      //         if (/\.stories\.(ts|js)$/.test(resource)) {
+      //           return true;
+      //         }
+      //       }
+      //       return false;
+      //     },
+      //   },
+      // ]);
     }
   });
 };
