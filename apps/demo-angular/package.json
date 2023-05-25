@@ -12,11 +12,11 @@
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
     "@nativescript/storybook-device": "file:../../dist/packages/storybook-device",
     "@nativescript/storybook-web": "file:../../dist/packages/storybook-web",
-    "@nativescript/storybook-generator": "file:../../dist/packages/storybook-generator",
-    "@nativescript/storybook": "file:../../dist/packages/storybook"
+    "@nativescript/storybook": "file:../../dist/packages/storybook",
+    "@nativescript/storybook-angular": "file:../../dist/packages/storybook-angular"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",
-    "@nativescript/ios": "~8.4.0"
+    "@nativescript/ios": "alpha"
   }
 }

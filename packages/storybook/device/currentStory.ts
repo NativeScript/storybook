@@ -1,2 +1,5 @@
-// replaced by server any time the current story changes.
-export const currentStory = null;
+export const currentStory = {
+  storyId: 'ns-card--secondary',
+  viewMode: 'story',
+  options: {},
+};

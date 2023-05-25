@@ -3,7 +3,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { Subject, BehaviorSubject } from 'rxjs';
 import { stringify } from 'telejson';
-import { ICollection, StoryFnAngularReturnType, Parameters } from '../types';
+import { ICollection, StoryFnAngularReturnType, Parameters } from './types';
 import { createStorybookModule, getStorybookModuleMetadata } from './StorybookModule';
 
 type StoryRenderInfo = {

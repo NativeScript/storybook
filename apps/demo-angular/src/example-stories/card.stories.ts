@@ -1,10 +1,10 @@
-import { Meta, Story } from '@storybook/angular';
+import { Meta, StoryFn } from '@storybook/angular';
 
 import { CardComponent } from './card.component';
 
 // More on default export: https://storybook.js.org/docs/angular/writing-stories/introduction#default-export
 export default {
-  id: 'ns-card',
+  id: 'example-card',
   title: 'Example/card',
   component: CardComponent,
   argTypes: {
@@ -20,7 +20,7 @@ export default {
 } as Meta;
 
 // More on component templates: https://storybook.js.org/docs/angular/writing-stories/introduction#using-args
-const Template: Story<CardComponent> = (args: CardComponent) => ({
+const Template: StoryFn<CardComponent> = (args: CardComponent) => ({
   props: { props: args },
 });
 

@@ -19,16 +19,17 @@ import 'zone.js';
 // Add NativeScript specific Zone JS patches
 import '@nativescript/zone-js';
 
-import { AppHostView, APP_ROOT_VIEW, NativeScriptModule, platformNativeScript, runNativeScriptAngularApp } from '@nativescript/angular';
+import { AppHostView, APP_ROOT_VIEW, NativeScriptModule, platformNativeScript, runNativeScriptAngularApp, bootstrapApplication } from '@nativescript/angular';
 import '@angular/compiler';
 
 import { Application, GridLayout } from '@nativescript/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { getCurrentStory, onStoryChange } from '../manager';
 import { ICollection, Parameters, StoryFnAngularReturnType } from './types';
 import { storiesMeta } from '../storyDiscovery';
 import { getApplication } from './StorybookModule';
 import { NgModule } from '@angular/core';
+import { STORY_PROPS } from './StorybookProvider';
 
 class StorybookRender {
   storyId: string;
@@ -72,16 +73,15 @@ class StorybookRender {
 
     // this.initAngularRootElement(targetDOMNode, targetSelector);
 
-    @NgModule({
-      imports: [NativeScriptModule],
-      bootstrap: [<any>application],
-    })
-    class StorybookModule {}
-
     try {
-      const module = await platformNativeScript().bootstrapModule(StorybookModule);
+      const module = await bootstrapApplication(application, {
+        providers: [{ provide: STORY_PROPS, useValue: new Subject() }],
+      });
       const view = module.injector.get(APP_ROOT_VIEW);
-      const newRoot = view instanceof AppHostView ? view.content : view;
+      let newRoot = view instanceof AppHostView ? view.content : view;
+      while (newRoot instanceof ProxyViewContainer) {
+        newRoot = newRoot.getChildAt(0);
+      }
       Application.resetRootView({
         create() {
           return newRoot;
@@ -113,6 +113,7 @@ class StorybookRender {
 const sbRender = new StorybookRender();
 
 function renderChange(newStory = getCurrentStory()) {
+  console.log('----story', newStory);
   if (newStory) {
     const { storyId, args } = newStory;
     sbRender.storyId = storyId;
@@ -136,7 +137,7 @@ function renderChange(newStory = getCurrentStory()) {
     sbRender.storyId = 'itemscomponent--primary';
     const meta = storiesMeta.get('itemscomponent--primary'); //storyId);
 
-    console.log('meta.component:', meta.component);
+    console.log('meta.component:', meta?.component);
     sbRender.render({
       storyFnAngular: {},
       component: meta?.component,

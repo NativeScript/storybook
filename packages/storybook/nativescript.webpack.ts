@@ -6,7 +6,7 @@ module.exports = (webpack: typeof NSWebpack) => {
   // todo: have a default entry that notes the selected flavor is unsupported or something
   let sbEntryPath = '';
 
-  const flavorName = webpack.Utils.flavor.determineProjectFlavor();
+  const flavorName = 'angular'; //webpack.Utils.flavor.determineProjectFlavor();
 
   if (flavorName && ['vue', 'angular'].includes(flavorName)) {
     // supported flavor, resolve entry path...
@@ -23,7 +23,7 @@ module.exports = (webpack: typeof NSWebpack) => {
         .add("@nativescript/core/bundle-entry-points")
         .add(sbEntryPath);
 
-      config.module.rule("bundle").test(webpack.Utils.project.getProjectFilePath(sbEntryPath));
+      // config.module.rule("bundle").test(webpack.Utils.project.getProjectFilePath(sbEntryPath));
 
       // allows triggering HMR from within node_modules where our custom entry is located at.
       config.set('snapshot', {
