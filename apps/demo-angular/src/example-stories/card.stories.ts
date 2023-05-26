@@ -1,6 +1,9 @@
 import { Meta, StoryFn } from '@storybook/angular';
 
 import { CardComponent } from './card.component';
+import { Application } from '@nativescript/core';
+
+console.log('Application', Application);
 
 // More on default export: https://storybook.js.org/docs/angular/writing-stories/introduction#default-export
 export default {

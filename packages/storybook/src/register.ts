@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { addons, types } from '@storybook/addons';
+import { useStorybookApi } from '@storybook/manager-api';
+
+type API = ReturnType<typeof useStorybookApi>;
 
 function debounce<T extends (...args: any[]) => void>(func: T, wait: number, immediate = false): (...args: any[]) => void {
   let timeout: any;
@@ -22,6 +25,9 @@ addons.register('NATIVESCRIPT', () => {
     title: 'STORYCHANGELISTENER',
     type: types.TOOLEXTRA,
     render() {
+      const api = useStorybookApi();
+      (window as any).__TEST_SB_API__ = api;
+
       // const [args] = useArgs()
       // console.log(args);
       if (!isListening) {
@@ -42,15 +48,51 @@ function listenToStoryChange() {
       // console.log("setCurrentStory", story);
       currentStory = story;
       storyChange(currentStory);
+
+      const api: API = (window as any).__TEST_SB_API__;
+      api.updateStory(currentStory.storyId, {
+        // todo: get the argTypes from websocket
+        argTypes: {
+          textInput: {
+            control: {
+              type: 'text',
+            },
+            name: 'textInput',
+            type: {
+              name: 'string',
+            },
+          },
+          textInput2: {
+            control: {
+              type: 'text',
+            },
+            name: 'textInput2',
+            type: {
+              name: 'string',
+            },
+          },
+        },
+        parameters: {
+          controls: { hideNoControlsWarning: true },
+        },
+      });
     });
+
     channel.addListener('updateStoryArgs', (storyArgs) => {
-      // console.log("updateStoryArgs", storyArgs);
+      console.log('updateStoryArgs', storyArgs);
+      const api: API = (window as any).__TEST_SB_API__;
 
       if (currentStory) {
-        currentStory.args = {
+        const updatedArgs = {
           ...currentStory.args,
           ...storyArgs.updatedArgs,
         };
+        currentStory.args = updatedArgs;
+
+        // persist args
+        api.updateStory(currentStory.storyId, {
+          args: updatedArgs,
+        });
 
         storyChange(currentStory);
       }

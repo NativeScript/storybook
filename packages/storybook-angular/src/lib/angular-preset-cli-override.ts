@@ -22,7 +22,10 @@ export async function webpackFinal(baseConfig: webpack.Configuration, options: S
   /**
    * Merge baseConfig Webpack with angular-cli Webpack
    */
-  const entry = ['./src/dummy.ts', ...(baseConfig.entry as any), ...(cliConfig.entry.styles ?? []), ...(cliConfig.entry.polyfills ?? [])];
+  const entry = [
+    './src/dummy.ts',
+    //  ...(baseConfig.entry as any), ...(cliConfig.entry.styles ?? []), ...(cliConfig.entry.polyfills ?? [])
+  ];
   // Don't use storybooks styling rules because we have to use rules created by @angular-devkit/build-angular
   // because @angular-devkit/build-angular created rules have include/exclude for global style files.
   const rulesExcludingStyles = filterOutStylingRules(baseConfig);

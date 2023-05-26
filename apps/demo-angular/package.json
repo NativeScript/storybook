@@ -6,8 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start-storybook": "start-storybook -p 53743",
-    "start": "storybook dev"
+    "start": "storybook dev -p 53743 --no-open"
   },
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
