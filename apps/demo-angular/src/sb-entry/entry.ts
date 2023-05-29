@@ -5,7 +5,7 @@ import { AppHostView, APP_ROOT_VIEW, NativeScriptModule, platformNativeScript, r
 import '@angular/compiler';
 
 import { Application, GridLayout, ProxyViewContainer } from '@nativescript/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, retry } from 'rxjs';
 // import { getCurrentStory, onStoryChange } from '../manager';
 import { ICollection, Parameters, StoryFnAngularReturnType } from './types';
 // import { storiesMeta } from '../storyDiscovery';
@@ -18,6 +18,10 @@ import { toId } from '@storybook/csf';
 function getCurrentStory() {
   return null;
 }
+
+import { webSocket } from 'rxjs/webSocket';
+
+const apiWebsocket = webSocket('ws://127.0.0.1:8080/device');
 
 // todo: handle differnt patterns, this is hard-coded right now and ignores the user storybook config...
 const storiesCtx = require.context('storybook-src/', true, /\.stories\.(js|ts)$/);
@@ -59,7 +63,6 @@ class StorybookRender {
 
   async render({ storyFnAngular, forced, parameters, component, targetDOMNode }: { storyFnAngular: StoryFnAngularReturnType; forced?: boolean; component?: any; parameters: Parameters; targetDOMNode?: HTMLElement }) {
     const targetSelector = `${this.generateTargetSelectorFromStoryId()}`;
-    console.log('targetSelector:', targetSelector);
     const application = getApplication({
       storyFnAngular,
       component,
@@ -92,7 +95,7 @@ class StorybookRender {
 
     try {
       const module = await bootstrapApplication(application, {
-        providers: [{ provide: STORY_PROPS, useValue: new Subject() }],
+        providers: [{ provide: STORY_PROPS, useValue: new BehaviorSubject(parameters) }],
       });
       const view = module.injector.get(APP_ROOT_VIEW);
       let newRoot = view instanceof AppHostView ? view.content : view;
@@ -140,10 +143,17 @@ function renderChange(newStory = getCurrentStory()) {
       ...meta.args,
       ...args,
     };
+    console.log('---parameters', parameters);
     sbRender.render({
-      storyFnAngular: {},
+      storyFnAngular: {
+        props: {
+          props: parameters,
+        },
+      },
       component: meta?.component,
-      parameters,
+      parameters: {
+        props: parameters,
+      },
     });
   } else {
     storiesMeta.forEach((v, k) => {
@@ -166,6 +176,22 @@ Application.on(Application.launchEvent, (args) => {
   args.root = null;
 
   renderChange();
+  let lastStoryId = null;
+  apiWebsocket.pipe(retry()).subscribe((v: any) => {
+    if (v.story.storyId !== lastStoryId) {
+      const meta = storiesMeta.get(v.story.storyId);
+      apiWebsocket.next({
+        kind: 'storyUpdate',
+        storyId: v.story.storyId,
+        argTypes: meta.meta.argTypes,
+        initialArgs: meta.args,
+        args: meta.args,
+      });
+      lastStoryId = v.story.storyId;
+    }
+
+    renderChange(v.story);
+  });
   // onStoryChange(renderChange);
 });
 

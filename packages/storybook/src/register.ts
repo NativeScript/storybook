@@ -111,34 +111,47 @@ function listenToStoryChange() {
       console.log(t);
 
       const api: API = (window as any).__TEST_SB_API__;
-      api.updateStory(currentStory.storyId, {
-        // todo: get the argTypes from websocket
-        argTypes: t,
-        parameters: {
-          controls: { hideNoControlsWarning: true },
-        },
-      });
-      // passing an empty object updates the current story!
-      api.updateStoryArgs({} as any, {
-        title: 'Hello',
-      });
+      // api.updateStory(currentStory.storyId, {
+      //   // todo: get the argTypes from websocket
+      //   argTypes: t,
+      //   parameters: {
+      //     controls: { hideNoControlsWarning: true },
+      //   },
+      // });
+      // // passing an empty object updates the current story!
+      // api.updateStoryArgs({} as any, {
+      //   title: 'Hello',
+      // });
     });
 
     channel.addListener('updateStoryArgs', (storyArgs) => {
       console.log('updateStoryArgs', storyArgs);
       const api: API = (window as any).__TEST_SB_API__;
 
-      if (currentStory) {
+      const currentStoryData = getStoryEntry(api.getCurrentStoryData());
+      if (currentStoryData) {
         const updatedArgs = {
-          ...currentStory.args,
+          ...currentStoryData.args,
           ...storyArgs.updatedArgs,
         };
         currentStory.args = updatedArgs;
 
         // persist args
-        api.updateStory(currentStory.storyId, {
+        api.updateStory(currentStoryData.id, {
           args: updatedArgs,
+          argTypes: currentStoryData.argTypes,
+          initialArgs: currentStoryData.initialArgs,
         });
+
+        socket.send(
+          JSON.stringify(<StoryChangeEvent>{
+            kind: 'storyChange',
+            story: {
+              storyId: currentStoryData.id,
+              args: updatedArgs,
+            },
+          })
+        );
 
         storyChange(currentStory);
       }

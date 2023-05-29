@@ -10,10 +10,11 @@
   },
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
+    "@nativescript/storybook": "file:../../dist/packages/storybook",
+    "@nativescript/storybook-angular": "file:../../dist/packages/storybook-angular",
     "@nativescript/storybook-device": "file:../../dist/packages/storybook-device",
     "@nativescript/storybook-web": "file:../../dist/packages/storybook-web",
-    "@nativescript/storybook": "file:../../dist/packages/storybook",
-    "@nativescript/storybook-angular": "file:../../dist/packages/storybook-angular"
+    "@valor/nativescript-websockets": "file:../../node_modules/@valor/nativescript-websockets"
   },
   "devDependencies": {
     "@nativescript/android": "~8.5.0",
