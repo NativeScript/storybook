@@ -15,7 +15,7 @@ Using Storybook for NativeScript is easy as 1, 2, 3.
 ### 1. Init config
 
 ```bash
-npx nativescript-storybook init
+npx @nativescript/storybook init
 ```
 
 ### 2. Create stories
@@ -27,8 +27,16 @@ You can create a `{component}.stories.ts|js` next to any component. Refer to sto
 
 ### 3. Run Storybook
 
+Run your app:
+
 ```bash
 ns debug ios|android --env.storybook
+```
+
+In a seperate terminal, you can launch Storybook:
+
+```bash
+npm run storybook
 ```
 
 ## License

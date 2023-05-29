@@ -4,13 +4,17 @@ const { redBright, green, greenBright, yellow } = require('ansi-colors');
 const { program } = require('commander');
 const dedent = require('ts-dedent').default;
 const { resolve } = require('path');
-const { existsSync, copyFileSync } = require('fs');
+// const { existsSync, copyFileSync, mkdir } = require('fs');
+import { existsSync, readFileSync, writeFileSync, copyFileSync, mkdirSync } from 'fs';
 import type { IWebpackEnv } from '@nativescript/webpack';
+
+const packagePath = resolve(process.cwd(), 'package.json');
 
 // TODO: make conditional based on flavor detection
 const mainConfig = resolve(__dirname, '../../stubs/angular/main.stub.js');
 const middlewareConfig = resolve(__dirname, '../../stubs/angular/middleware.stub.js');
 const previewConfig = resolve(__dirname, '../../stubs/angular/preview.stub.js');
+const mainStubEntry = resolve(__dirname, '../../stubs/angular/main-storybook.stub.js');
 const tag = `[${green('@nativescript/storybook')}]`;
 
 function error(message: string) {
@@ -27,9 +31,16 @@ program
   .command('init')
   .description('Initialize a new webpack.config.js in the current directory.')
   .action(() => {
-    const mainPath = resolve(process.cwd(), '.storybook', 'main.js');
-    const middlewarePath = resolve(process.cwd(), '.storybook', 'middleware.js');
-    const previewPath = resolve(process.cwd(), '.storybook', 'preview.js');
+    const mainFolderPath = resolve(process.cwd(), '.storybook');
+    const mainPath = resolve(mainFolderPath, 'main.js');
+    const middlewarePath = resolve(mainFolderPath, 'middleware.js');
+    const previewPath = resolve(mainFolderPath, 'preview.js');
+    const mainStubEntryPath = resolve(process.cwd(), 'src', 'main.storybook.ts');
+    const packageJson = JSON.parse(
+      readFileSync(packagePath, {
+        encoding: 'utf-8',
+      })
+    );
 
     if (existsSync(mainPath)) {
       error(`Already initialized, files already exist:`);
@@ -43,9 +54,22 @@ program
       return;
     }
 
+    if (!existsSync(mainFolderPath)) {
+      mkdirSync(mainFolderPath);
+    }
+
     copyFileSync(mainConfig, mainPath);
     copyFileSync(middlewareConfig, middlewarePath);
     copyFileSync(previewConfig, previewPath);
+    copyFileSync(mainStubEntry, mainStubEntryPath);
+
+    if (!packageJson.scripts) {
+      packageJson.scripts = {};
+    }
+    if (!packageJson.scripts['storybook']) {
+      packageJson.scripts['storybook'] = 'storybook dev -p 53743';
+    }
+    writeFileSync(packagePath, JSON.stringify(packageJson, null, 2));
 
     info('Initialized Storybook config in ".storybook" folder.');
   });
