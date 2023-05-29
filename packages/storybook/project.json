@@ -10,6 +10,7 @@
         "outputPath": "dist/packages/storybook",
         "tsConfig": "packages/storybook/tsconfig.json",
         "packageJson": "packages/storybook/package.json",
+        "updateBuildableProjectDepsInPackageJson": false,
         "main": "packages/storybook/index.d.ts",
         "assets": [
           "packages/storybook/*.md",

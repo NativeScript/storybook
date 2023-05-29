@@ -1,10 +1,10 @@
-import { Application, Request, Response, json } from 'express';
+// import { Application, Request, Response, json } from 'express';
 
 import { WebSocketServer, WebSocket } from 'ws';
 import { StoryChangeEvent } from './types';
 
 export const middleware = () => {
-  return (app: Application) => {
+  return () => {
     const wsServer = new WebSocketServer({
       port: 8080,
     });

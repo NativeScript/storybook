@@ -1,14 +1,14 @@
 import * as webpack from 'webpack';
-import { logger } from '@storybook/node-logger';
-import { BuilderContext, targetFromTargetString } from '@angular-devkit/architect';
-import { sync as findUpSync } from 'find-up';
-import { dedent } from 'ts-dedent';
-import { JsonObject, logging } from '@angular-devkit/core';
+// import { logger } from '@storybook/node-logger';
+// import { BuilderContext, targetFromTargetString } from '@angular-devkit/architect';
+// import { sync as findUpSync } from 'find-up';
+// import { dedent } from 'ts-dedent';
+// import { JsonObject, logging } from '@angular-devkit/core';
 import { StorybookConfigOptions } from '@storybook/types';
 import { cwd } from 'process';
 import { default as StorybookNormalizeAngularEntryPlugin } from '@storybook/angular/dist/server/plugins/storybook-normalize-angular-entry-plugin';
 import { filterOutStylingRules } from '@storybook/angular/dist/server/utils/filter-out-styling-rules';
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+// const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 export async function webpackFinal(baseConfig: webpack.Configuration, options: StorybookConfigOptions): Promise<any> {
   // @ts-ignore
