@@ -3,7 +3,9 @@
   "compilerOptions": {
     "module": "Node16",
     "outDir": "../../dist/out-tsc",
-    "rootDir": "."
+    "rootDir": ".",
+    "importHelpers": true,
+    "target": "ES2015"
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts", "angular", "./device"],
   "include": ["**/*.ts", "references.d.ts"]

@@ -1,8 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { addons, types } from '@storybook/addons';
 import { useStorybookApi } from '@storybook/manager-api';
+import { normalizeInputTypes } from './normalizeInputTypes';
+import { API_LeafEntry, API_StoryEntry, ArgTypes, Args } from '@storybook/types';
 
 type API = ReturnType<typeof useStorybookApi>;
+
+interface StoryChangeEvent {
+  kind: 'storyChange';
+  story: any;
+}
+interface StoryUpdateEvent {
+  kind: 'storyUpdate';
+  storyId: string;
+  argTypes: ArgTypes<Args>;
+  initialArgs?: Args;
+  args?: Args;
+}
+
+interface StoryArgsUpdateEvent {
+  kind: 'storyUpdate';
+  storyId: string;
+  storyUpdate: Args;
+}
+
+function isStoryChangeEvent(event: any): event is StoryChangeEvent {
+  return event.kind === 'storyChange';
+}
+
+function isStoryUpdateEvent(event: any): event is StoryUpdateEvent {
+  return event.kind === 'storyUpdate';
+}
+
+function isStoryArgsUpdateEvent(event: any): event is StoryArgsUpdateEvent {
+  return event.kind === 'storyUpdate';
+}
+
+function parseJson(json: string) {
+  try {
+    return JSON.parse(json);
+  } catch (e) {
+    return null;
+  }
+}
+
+function getStoryEntry(data: API_LeafEntry) {
+  if (data?.type === 'story') {
+    return data as API_StoryEntry;
+  }
+  return null;
+}
 
 function debounce<T extends (...args: any[]) => void>(func: T, wait: number, immediate = false): (...args: any[]) => void {
   let timeout: any;
@@ -41,40 +88,68 @@ addons.register('NATIVESCRIPT', () => {
 });
 
 function listenToStoryChange() {
+  const api = useStorybookApi();
+  const socket = new WebSocket('ws://localhost:8080/preview');
+  socket.onmessage = (event) => {
+    const wsData = parseJson(event.data);
+    if (!wsData) {
+      return;
+    }
+    if (isStoryUpdateEvent(wsData)) {
+      api.updateStory(wsData.storyId, {
+        argTypes: normalizeInputTypes(wsData.argTypes),
+        initialArgs: wsData.initialArgs,
+        args: wsData.args,
+        parameters: {
+          controls: { hideNoControlsWarning: true },
+        },
+      });
+    } else if (isStoryArgsUpdateEvent(wsData)) {
+      const data = getStoryEntry(api.getData(wsData.storyId));
+      if (data) {
+        api.updateStoryArgs(data, wsData.storyUpdate);
+      }
+    }
+  };
   addons.ready().then((channel) => {
     let currentStory: any = null;
+    console.log(getStoryEntry(api.getCurrentStoryData()));
 
     channel.addListener('setCurrentStory', (story) => {
       // console.log("setCurrentStory", story);
       currentStory = story;
       storyChange(currentStory);
+      socket.send(
+        JSON.stringify(<StoryChangeEvent>{
+          kind: 'storyChange',
+          story: currentStory,
+        })
+      );
+
+      const t = normalizeInputTypes({
+        title: { control: 'text' },
+        titleColor: { control: 'color' },
+        content: { control: 'text' },
+        contentColor: { control: 'color' },
+        borderRadius: { control: { type: 'range', min: 0, max: 30, step: 1 } },
+        imageBorderRadius: { control: { type: 'range', min: 0, max: 30, step: 1 } },
+        boxShadow: { control: 'text' },
+        imageSrc: { control: 'text' },
+      });
+      // console.log(api.getData())
+      console.log(t);
 
       const api: API = (window as any).__TEST_SB_API__;
       api.updateStory(currentStory.storyId, {
         // todo: get the argTypes from websocket
-        argTypes: {
-          textInput: {
-            control: {
-              type: 'text',
-            },
-            name: 'textInput',
-            type: {
-              name: 'string',
-            },
-          },
-          textInput2: {
-            control: {
-              type: 'text',
-            },
-            name: 'textInput2',
-            type: {
-              name: 'string',
-            },
-          },
-        },
+        argTypes: t,
         parameters: {
           controls: { hideNoControlsWarning: true },
         },
+      });
+      // passing an empty object updates the current story!
+      api.updateStoryArgs({} as any, {
+        title: 'Hello',
       });
     });
 
