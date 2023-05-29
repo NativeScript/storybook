@@ -11,6 +11,11 @@ module.exports = (webpack: typeof NSWebpack) => {
   if (flavorName && ['vue', 'angular'].includes(flavorName)) {
     // supported flavor, resolve entry path...
     sbEntryPath = resolve(__dirname, `./device/${flavorName}/entry`);
+    // if (flavorName === 'angular') {
+    //   sbEntryPath = resolve(__dirname, `./device/${flavorName}`);
+    // } else {
+    //   sbEntryPath = resolve(__dirname, `./device/${flavorName}/entry`);
+    // }
   }
 
   webpack.chainWebpack((config, env) => {

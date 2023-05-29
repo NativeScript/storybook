@@ -1,10 +1,10 @@
-<GridLayout margin="20" height="800px" rows="*" columns="*" [borderRadius]="props?.borderRadius" [boxShadow]="props?.boxShadow">
-  <GridLayout rows="auto, auto" columns="*" backgroundColor="#fff" [borderRadius]="props?.borderRadius" padding="10">
-    <Image height="450px" stretch="aspectFill" [borderRadius]="props?.imageBorderRadius" [src]="props?.imageSrc" [visibility]="props?.imageSrc ? 'visible' : 'hidden'"></Image>
+<GridLayout margin="20" height="800px" rows="*" columns="*" [borderRadius]="borderRadius" [style.box-shadow]="boxShadow">
+  <GridLayout rows="auto, auto" columns="*" backgroundColor="#fff" [borderRadius]="borderRadius" padding="10">
+    <Image height="450px" stretch="aspectFill" [borderRadius]="imageBorderRadius" [src]="imageSrc" [visibility]="imageSrc ? 'visible' : 'hidden'"></Image>
 
     <StackLayout row="1" padding="15">
-      <Label [text]="props?.title" [color]="props?.titleColor" fontWeight="bold" fontSize="24"></Label>
-      <Label [text]="props?.content" marginTop="10" [color]="props?.contentColor" textWrap="true"></Label>
+      <Label [text]="title" [color]="titleColor" fontWeight="bold" fontSize="24"></Label>
+      <Label [text]="content" marginTop="10" [color]="contentColor" textWrap="true"></Label>
     </StackLayout>
   </GridLayout>
 </GridLayout>

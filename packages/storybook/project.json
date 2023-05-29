@@ -24,6 +24,11 @@
             "glob": "**/*",
             "input": "packages/storybook/device",
             "output": "./device"
+          },
+          {
+            "glob": "**/*",
+            "input": "packages/storybook/stubs",
+            "output": "./stubs"
           }
         ],
         "dependsOn": [
@@ -37,7 +42,7 @@
     "build.all": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["node tools/scripts/build-finish.ts storybook"],
+        "commands": ["node tools/scripts/build-finish.ts storybook", "chmod +x dist/packages/storybook/src/bin/index.js"],
         "parallel": false
       },
       "outputs": ["{workspaceRoot}/dist/packages/storybook"],

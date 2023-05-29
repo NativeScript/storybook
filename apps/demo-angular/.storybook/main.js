@@ -6,17 +6,14 @@
 //     builder: 'webpack5',
 //   },
 // };
-const path = require('path');
 
-const frameworkName = path.dirname(require.resolve('@nativescript/storybook-angular/package.json'));
-import { frameworkPackages } from '@storybook/core-common';
-frameworkPackages[frameworkName] = 'angular';
+const { AngularFramework } = require('@nativescript/storybook');
 
 module.exports = {
   stories: ['../src/**/*.stories.ts'],
   /* prettier-ignore */
   addons: [
-    '@storybook/addon-actions',
+    // '@storybook/addon-actions',
     '@storybook/addon-controls',
     // '@storybook/addon-links',
     // '@storybook/addon-essentials',
@@ -26,6 +23,5 @@ module.exports = {
   core: {
     builder: 'webpack5',
   },
-  framework: frameworkName,
-  // framework: '@storybook/angular',
+  framework: AngularFramework,
 };

@@ -36,6 +36,10 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait: number, imm
   };
 }
 
+const updateStoryArgs = debounce((fn: () => void) => {
+  fn();
+}, 100);
+
 addons.register('NATIVESCRIPT', () => {
   let isListening = false;
 
@@ -86,10 +90,34 @@ function listenToStoryChange() {
     let currentStory: any = null;
     console.log(getStoryEntry(api.getCurrentStoryData()));
 
+    if (window.location.search.includes('/story/')) {
+      const checkStory = () => {
+        console.log('checking story...');
+        const story = api.getCurrentStoryData();
+        if (story && !currentStory) {
+          currentStory = story;
+          console.log('found story', currentStory);
+          socket.send(
+            JSON.stringify(<StoryChangeEvent>{
+              kind: 'storyChange',
+              force: true,
+              story: {
+                storyId: currentStory.id,
+              },
+            })
+          );
+          return;
+        }
+
+        setTimeout(checkStory, 100);
+      };
+
+      checkStory();
+    }
+
     channel.addListener('setCurrentStory', (story) => {
       // console.log("setCurrentStory", story);
       currentStory = story;
-      storyChange(currentStory);
       socket.send(
         JSON.stringify(<StoryChangeEvent>{
           kind: 'storyChange',
@@ -136,42 +164,25 @@ function listenToStoryChange() {
         };
         currentStory.args = updatedArgs;
 
-        // persist args
-        api.updateStory(currentStoryData.id, {
-          args: updatedArgs,
-          argTypes: currentStoryData.argTypes,
-          initialArgs: currentStoryData.initialArgs,
+        updateStoryArgs(() => {
+          // persist args
+          api.updateStory(currentStoryData.id, {
+            args: updatedArgs,
+            argTypes: currentStoryData.argTypes,
+            initialArgs: currentStoryData.initialArgs,
+          });
+
+          socket.send(
+            JSON.stringify(<StoryChangeEvent>{
+              kind: 'storyChange',
+              story: {
+                storyId: currentStoryData.id,
+                args: updatedArgs,
+              },
+            })
+          );
         });
-
-        socket.send(
-          JSON.stringify(<StoryChangeEvent>{
-            kind: 'storyChange',
-            story: {
-              storyId: currentStoryData.id,
-              args: updatedArgs,
-            },
-          })
-        );
-
-        storyChange(currentStory);
       }
     });
   });
 }
-
-const storyChange = debounce((story: any) => {
-  console.log('story change', story);
-
-  try {
-    fetch('/nativescript/changeStory', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(story),
-    });
-    // controller.openDeepLink(newAppUrl);
-  } catch (err) {
-    // ignore
-  }
-}, 500);

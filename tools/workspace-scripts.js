@@ -102,12 +102,6 @@ module.exports = {
           description: '@nativescript/storybook: Build',
         },
       },
-      'storybook-angular': {
-        build: {
-          script: 'nx run storybook-angular:build.all',
-          description: '@nativescript/storybook-angular: Build',
-        },
-      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',

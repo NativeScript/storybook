@@ -1,35 +1,57 @@
-/**
- * NativeScript Polyfills
- */
-
-// Install @nativescript/core polyfills (XHR, setTimeout, requestAnimationFrame)
-import '@nativescript/core/globals';
-// Install @nativescript/angular specific polyfills
-import '@nativescript/angular/polyfills';
-
-/**
- * Zone.js and patches
- */
-// Add pre-zone.js patches needed for the NativeScript platform
-import '@nativescript/zone-js/dist/pre-zone-polyfills';
-
-// Zone JS is required by default for Angular itself
-import 'zone.js';
-
-// Add NativeScript specific Zone JS patches
-import '@nativescript/zone-js';
+import './polyfills';
+import '@angular/compiler';
 
 import { AppHostView, APP_ROOT_VIEW, NativeScriptModule, platformNativeScript, runNativeScriptAngularApp, bootstrapApplication } from '@nativescript/angular';
 import '@angular/compiler';
 
 import { Application, GridLayout, ProxyViewContainer } from '@nativescript/core';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { getCurrentStory, onStoryChange } from '../manager';
+import { BehaviorSubject, Subject, retry } from 'rxjs';
+// import { getCurrentStory, onStoryChange } from '../manager';
 import { ICollection, Parameters, StoryFnAngularReturnType } from './types';
-import { storiesMeta } from '../storyDiscovery';
+// import { storiesMeta } from '../storyDiscovery';
 import { getApplication } from './StorybookModule';
 import { NgModule } from '@angular/core';
 import { STORY_PROPS } from './StorybookProvider';
+
+import { toId } from '@storybook/csf';
+
+function getCurrentStory() {
+  return null;
+}
+
+import { webSocket } from 'rxjs/webSocket';
+
+const apiWebsocket = webSocket('ws://127.0.0.1:8080/device');
+
+// todo: handle differnt patterns, this is hard-coded right now and ignores the user storybook config...
+const storiesCtx = require.context('storybook-src/', true, /\.stories\.(js|ts)$/);
+
+export const storiesMeta = new Map();
+let currentBehaviorSubject: BehaviorSubject<any> | null = null;
+
+storiesCtx.keys().forEach((key: string) => {
+  console.log('[Storybook] Discovered:', key);
+  const data = storiesCtx(key);
+  const storyMeta = data.default;
+  const exports = Object.keys(data).filter((name) => name !== 'default');
+
+  const storiesInFile: any = exports.map((name: string) => {
+    return {
+      id: toId(storyMeta.title, name),
+      name,
+    };
+  });
+
+  storiesInFile.forEach((story: any) => {
+    storiesMeta.set(story.id, {
+      id: story.id,
+      meta: storyMeta,
+      component: storyMeta.component,
+      args: data[story.name].args,
+      factory: data[story.name],
+    });
+  });
+});
 
 class StorybookRender {
   storyId: string;
@@ -42,7 +64,6 @@ class StorybookRender {
 
   async render({ storyFnAngular, forced, parameters, component, targetDOMNode }: { storyFnAngular: StoryFnAngularReturnType; forced?: boolean; component?: any; parameters: Parameters; targetDOMNode?: HTMLElement }) {
     const targetSelector = `${this.generateTargetSelectorFromStoryId()}`;
-    console.log('targetSelector:', targetSelector);
     const application = getApplication({
       storyFnAngular,
       component,
@@ -74,8 +95,10 @@ class StorybookRender {
     // this.initAngularRootElement(targetDOMNode, targetSelector);
 
     try {
+      currentBehaviorSubject?.complete();
+      currentBehaviorSubject = new BehaviorSubject(parameters);
       const module = await bootstrapApplication(application, {
-        providers: [{ provide: STORY_PROPS, useValue: new Subject() }],
+        providers: [{ provide: STORY_PROPS, useValue: currentBehaviorSubject }],
       });
       const view = module.injector.get(APP_ROOT_VIEW);
       let newRoot = view instanceof AppHostView ? view.content : view;
@@ -123,8 +146,11 @@ function renderChange(newStory = getCurrentStory()) {
       ...meta.args,
       ...args,
     };
+    console.log('---parameters', parameters);
     sbRender.render({
-      storyFnAngular: {},
+      storyFnAngular: {
+        props: parameters,
+      },
       component: meta?.component,
       parameters,
     });
@@ -134,8 +160,8 @@ function renderChange(newStory = getCurrentStory()) {
       console.log(v);
     });
     console.log('size:', storiesMeta.size);
-    sbRender.storyId = 'itemscomponent--primary';
-    const meta = storiesMeta.get('itemscomponent--primary'); //storyId);
+    sbRender.storyId = 'example-card--primary';
+    const meta = storiesMeta.get('example-card--primary'); //storyId);
 
     console.log('meta.component:', meta?.component);
     sbRender.render({
@@ -149,7 +175,24 @@ Application.on(Application.launchEvent, (args) => {
   args.root = null;
 
   renderChange();
-  onStoryChange(renderChange);
+  let lastStoryId = null;
+  apiWebsocket.pipe(retry()).subscribe((v: any) => {
+    if (v.story.storyId !== lastStoryId || v.force) {
+      const meta = storiesMeta.get(v.story.storyId);
+      apiWebsocket.next({
+        kind: 'storyUpdate',
+        storyId: v.story.storyId,
+        argTypes: meta.meta.argTypes,
+        initialArgs: meta.args,
+        args: meta.args,
+      });
+      lastStoryId = v.story.storyId;
+      renderChange(v.story);
+    } else {
+      currentBehaviorSubject.next(v.story.args);
+    }
+  });
+  // onStoryChange(renderChange);
 });
 
 Application.run();

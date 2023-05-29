@@ -149,14 +149,10 @@ function renderChange(newStory = getCurrentStory()) {
     console.log('---parameters', parameters);
     sbRender.render({
       storyFnAngular: {
-        props: {
-          props: parameters,
-        },
-      },
-      component: meta?.component,
-      parameters: {
         props: parameters,
       },
+      component: meta?.component,
+      parameters,
     });
   } else {
     storiesMeta.forEach((v, k) => {
@@ -181,7 +177,7 @@ Application.on(Application.launchEvent, (args) => {
   renderChange();
   let lastStoryId = null;
   apiWebsocket.pipe(retry()).subscribe((v: any) => {
-    if (v.story.storyId !== lastStoryId) {
+    if (v.story.storyId !== lastStoryId || v.force) {
       const meta = storiesMeta.get(v.story.storyId);
       apiWebsocket.next({
         kind: 'storyUpdate',
@@ -193,8 +189,7 @@ Application.on(Application.launchEvent, (args) => {
       lastStoryId = v.story.storyId;
       renderChange(v.story);
     } else {
-      // TODO: fix story and remove this "props" uglyness
-      currentBehaviorSubject.next({ props: v.story.args });
+      currentBehaviorSubject.next(v.story.args);
     }
   });
   // onStoryChange(renderChange);
