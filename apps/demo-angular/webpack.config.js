@@ -8,6 +8,7 @@ module.exports = (env) => {
   webpack.chainWebpack((config) => {
     // shared demo code
     config.resolve.alias.set('@demo/shared', resolve(__dirname, '..', '..', 'tools', 'demo'));
+    config.resolve.alias.set('storybook-src', resolve(__dirname));
 
     // polyfills
     config.resolve.set(

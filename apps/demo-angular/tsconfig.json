@@ -11,6 +11,6 @@
       "@nativescript/storybook-web": ["packages/storybook-web/index.d.ts"]
     }
   },
-  "files": ["./references.d.ts", "./src/main.ts", "./src/polyfills.ts"],
+  "files": ["./references.d.ts", "./src/main.ts", "./src/polyfills.ts", "./src/sb-entry/entry.ts"],
   "include": ["**/*.stories.ts", "./src/dummy.ts"]
 }

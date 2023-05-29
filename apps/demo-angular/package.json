@@ -1,5 +1,5 @@
 {
-  "main": "./src/main.ts",
+  "main": "./src/sb-entry/entry.ts",
   "name": "demo-angular",
   "version": "0.0.0",
   "description": "storybook sample",
