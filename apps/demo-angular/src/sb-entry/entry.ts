@@ -27,6 +27,7 @@ const apiWebsocket = webSocket('ws://127.0.0.1:8080/device');
 const storiesCtx = require.context('storybook-src/', true, /\.stories\.(js|ts)$/);
 
 export const storiesMeta = new Map();
+let currentBehaviorSubject: BehaviorSubject<any> | null = null;
 
 storiesCtx.keys().forEach((key: string) => {
   console.log('[Storybook] Discovered:', key);
@@ -94,8 +95,10 @@ class StorybookRender {
     // this.initAngularRootElement(targetDOMNode, targetSelector);
 
     try {
+      currentBehaviorSubject?.complete();
+      currentBehaviorSubject = new BehaviorSubject(parameters);
       const module = await bootstrapApplication(application, {
-        providers: [{ provide: STORY_PROPS, useValue: new BehaviorSubject(parameters) }],
+        providers: [{ provide: STORY_PROPS, useValue: currentBehaviorSubject }],
       });
       const view = module.injector.get(APP_ROOT_VIEW);
       let newRoot = view instanceof AppHostView ? view.content : view;
@@ -188,9 +191,11 @@ Application.on(Application.launchEvent, (args) => {
         args: meta.args,
       });
       lastStoryId = v.story.storyId;
+      renderChange(v.story);
+    } else {
+      // TODO: fix story and remove this "props" uglyness
+      currentBehaviorSubject.next({ props: v.story.args });
     }
-
-    renderChange(v.story);
   });
   // onStoryChange(renderChange);
 });
