@@ -2,39 +2,10 @@
 import { addons, types } from '@storybook/addons';
 import { useStorybookApi } from '@storybook/manager-api';
 import { normalizeInputTypes } from './normalizeInputTypes';
-import { API_LeafEntry, API_StoryEntry, ArgTypes, Args } from '@storybook/types';
+import { API_LeafEntry, API_StoryEntry } from '@storybook/types';
+import { StoryChangeEvent, isStoryArgsUpdateEvent, isStoryUpdateEvent } from './types';
 
 type API = ReturnType<typeof useStorybookApi>;
-
-interface StoryChangeEvent {
-  kind: 'storyChange';
-  story: any;
-}
-interface StoryUpdateEvent {
-  kind: 'storyUpdate';
-  storyId: string;
-  argTypes: ArgTypes<Args>;
-  initialArgs?: Args;
-  args?: Args;
-}
-
-interface StoryArgsUpdateEvent {
-  kind: 'storyUpdate';
-  storyId: string;
-  storyUpdate: Args;
-}
-
-function isStoryChangeEvent(event: any): event is StoryChangeEvent {
-  return event.kind === 'storyChange';
-}
-
-function isStoryUpdateEvent(event: any): event is StoryUpdateEvent {
-  return event.kind === 'storyUpdate';
-}
-
-function isStoryArgsUpdateEvent(event: any): event is StoryArgsUpdateEvent {
-  return event.kind === 'storyUpdate';
-}
 
 function parseJson(json: string) {
   try {

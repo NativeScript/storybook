@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { writeFileSync } from 'node:fs';
 
 import { WebSocketServer, WebSocket } from 'ws';
+import { StoryChangeEvent } from './types';
 
 const currentPath = resolve(__dirname, '../../../dist/packages/storybook/device/currentStory.ts');
 
@@ -13,6 +14,7 @@ export const middleware = () => {
     });
 
     let preview: WebSocket;
+    let lastStoryChangeEvent: StoryChangeEvent;
     const devices: WebSocket[] = [];
     wsServer.on('connection', (ws, req) => {
       if (req.url === '/preview') {
@@ -20,6 +22,16 @@ export const middleware = () => {
         console.log('preview connection');
         ws.on('message', (message, isBinary) => {
           console.log('preview message', isBinary ? message : message.toString('utf8'));
+          if (!isBinary) {
+            try {
+              const data = JSON.parse(message.toString('utf8'));
+              if (data.kind === 'storyChange') {
+                lastStoryChangeEvent = data;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
           devices.forEach((device) => {
             device.send(message, {
               binary: isBinary,
@@ -29,6 +41,9 @@ export const middleware = () => {
       } else if (req.url === '/device') {
         console.log('device connection');
         devices.push(ws);
+        if (lastStoryChangeEvent) {
+          ws.send(JSON.stringify(lastStoryChangeEvent));
+        }
         ws.on('message', (message, isBinary) => {
           console.log('device message', isBinary ? message : message.toString('utf8'));
           preview?.send(message, {
