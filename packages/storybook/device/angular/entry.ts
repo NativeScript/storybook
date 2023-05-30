@@ -15,7 +15,7 @@ import { STORY_PROPS } from './StorybookProvider';
 
 import { toId } from '@storybook/csf';
 
-function getCurrentStory() {
+function getCurrentStory(): any {
   return null;
 }
 
@@ -24,7 +24,8 @@ import { webSocket } from 'rxjs/webSocket';
 const apiWebsocket = webSocket('ws://127.0.0.1:8080/device');
 
 // todo: handle differnt patterns, this is hard-coded right now and ignores the user storybook config...
-const storiesCtx = require.context('storybook-src/', true, /\.stories\.(js|ts)$/);
+// @ts-ignore
+const storiesCtx = require.context('../../../../../src/', true, /\.stories\.(js|ts)$/);
 
 export const storiesMeta = new Map();
 let currentBehaviorSubject: BehaviorSubject<any> | null = null;
@@ -171,7 +172,7 @@ function renderChange(newStory = getCurrentStory()) {
     });
   }
 }
-Application.on(Application.launchEvent, (args) => {
+Application.on(Application.launchEvent, (args: any) => {
   args.root = null;
 
   renderChange();
@@ -188,7 +189,7 @@ Application.on(Application.launchEvent, (args) => {
       });
       lastStoryId = v.story.storyId;
       renderChange(v.story);
-    } else {
+    } else if (currentBehaviorSubject) {
       currentBehaviorSubject.next(v.story.args);
     }
   });

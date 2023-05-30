@@ -6,15 +6,26 @@ const dedent = require('ts-dedent').default;
 const { resolve } = require('path');
 // const { existsSync, copyFileSync, mkdir } = require('fs');
 import { existsSync, readFileSync, writeFileSync, copyFileSync, mkdirSync } from 'fs';
+import { Utils } from '@nativescript/webpack';
 import type { IWebpackEnv } from '@nativescript/webpack';
 
 const packagePath = resolve(process.cwd(), 'package.json');
 
 // TODO: make conditional based on flavor detection
-const mainConfig = resolve(__dirname, '../../stubs/angular/main.stub.js');
-const middlewareConfig = resolve(__dirname, '../../stubs/angular/middleware.stub.js');
-const previewConfig = resolve(__dirname, '../../stubs/angular/preview.stub.js');
-const mainStubEntry = resolve(__dirname, '../../stubs/angular/main-storybook.stub.js');
+function getConfigs() {
+  const flavor = Utils.flavor.determineProjectFlavor();
+  const mainConfig = resolve(__dirname, `../../stubs/${flavor}/main.stub.js`);
+  const middlewareConfig = resolve(__dirname, `../../stubs/${flavor}/middleware.stub.js`);
+  const previewConfig = resolve(__dirname, `../../stubs/${flavor}/preview.stub.js`);
+  const mainStubEntry = resolve(__dirname, `../../stubs/${flavor}/main-storybook.stub.js`);
+
+  return {
+    mainConfig,
+    middlewareConfig,
+    previewConfig,
+    mainStubEntry,
+  };
+}
 const tag = `[${green('@nativescript/storybook')}]`;
 
 function error(message: string) {
@@ -31,6 +42,7 @@ program
   .command('init')
   .description('Initialize a new webpack.config.js in the current directory.')
   .action(() => {
+    const { mainConfig, middlewareConfig, previewConfig, mainStubEntry } = getConfigs();
     const mainFolderPath = resolve(process.cwd(), '.storybook');
     const mainPath = resolve(mainFolderPath, 'main.js');
     const middlewarePath = resolve(mainFolderPath, 'middleware.js');
