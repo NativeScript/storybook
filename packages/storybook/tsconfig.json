@@ -4,8 +4,9 @@
     "module": "Node16",
     "outDir": "../../dist/out-tsc",
     "rootDir": ".",
+    "noEmitHelpers": false,
     "importHelpers": true,
-    "target": "ES2015"
+    "target": "ES6"
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts", "angular", "./device"],
   "include": ["**/*.ts", "references.d.ts"]

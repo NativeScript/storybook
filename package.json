@@ -50,6 +50,7 @@
     "@storybook/core-webpack": "7.0.18",
     "@storybook/native-controllers": "^2.2.8",
     "@storybook/types": "7.0.18",
+    "@storybook/vue-webpack5": "7.0.18",
     "@swc-node/register": "^1.4.2",
     "@swc/cli": "~0.1.55",
     "@swc/core": "^1.2.173",

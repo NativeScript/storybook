@@ -1,5 +1,5 @@
 // @ts-ignore
-window.global = require('@storybook/global');
+window.global = require("@storybook/global");
 // @ts-ignore
 window.process = { env: {} };
 // @ts-ignore

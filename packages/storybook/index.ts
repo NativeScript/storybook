@@ -1,11 +1,14 @@
-import { middleware } from './src/middleware';
-const path = require('path');
-
-const AngularFramework = path.resolve(__dirname, './src/angular'); // path.dirname(require.resolve('@nativescript/storybook/package.json'));
 import { frameworkPackages } from '@storybook/core-common';
+import { resolve } from 'path';
+import { middleware } from './src/middleware';
+
+const AngularFramework = resolve(__dirname, './src/angular');
 frameworkPackages[AngularFramework] = 'nativescript';
 
-export { middleware, AngularFramework };
+const VueFramework = resolve(__dirname, './src/vue');
+frameworkPackages[VueFramework] = 'nativescript';
+
+export { middleware, AngularFramework, VueFramework };
 export default {
   middleware,
 };

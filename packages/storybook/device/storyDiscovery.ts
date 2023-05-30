@@ -1,9 +1,15 @@
 import { toId } from '@storybook/csf';
 
 // todo: handle differnt patterns, this is hard-coded right now and ignores the user storybook config...
-const storiesCtx = require.context('@/', true, /\.stories\.(js|ts)$/);
+const storiesCtx = (require as any).context('@/', true, /\.stories\.(js|ts)$/);
 
 export const storiesMeta = new Map();
+
+console.log('[Storybook] Discovering stories...');
+
+if (!storiesCtx.keys().length) {
+  console.log('[Storybook] No stories found!');
+}
 
 storiesCtx.keys().forEach((key: string) => {
   console.log('[Storybook] Discovered:', key);

@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
+
 import Vue from 'nativescript-vue';
-import { getCurrentStory, onStoryChange } from '../manager';
+import { WebSocket } from '@valor/nativescript-websockets/websocket';
 import { storiesMeta } from '../storyDiscovery';
+
+const apiWebsocket = new WebSocket('ws://127.0.0.1:8080/device');
 
 new Vue({
   data: {
-    story: getCurrentStory(),
+    story: null,
     currentComponent: null,
   },
   created() {
-    onStoryChange((story: any) => {
-      this.story = story;
+    apiWebsocket.addEventListener('message', (event: any) => {
+      const data = JSON.parse(event.data);
+      // console.log('incoming', data);
+      if (data.kind === 'storyChange') {
+        this.$set(this, 'story', data.story);
+      }
     });
   },
   watch: {
@@ -42,11 +48,21 @@ new Vue({
         component = story.component;
       }
 
+      apiWebsocket.send(
+        JSON.stringify({
+          kind: 'storyUpdate',
+          storyId: storyId,
+          argTypes: story.meta.argTypes,
+          initialArgs: story.args,
+          args: _args,
+        })
+      );
+
       this.currentComponent = {
         id: story.id,
         component,
         args: _args,
-      };
+      } as any;
     },
   },
   template: `
