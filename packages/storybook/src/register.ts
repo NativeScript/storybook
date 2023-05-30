@@ -106,6 +106,12 @@ function listenToStoryChange() {
               },
             })
           );
+
+          api.updateStory(currentStory.id, {
+            parameters: {
+              controls: { hideNoControlsWarning: true },
+            },
+          });
           return;
         }
 
@@ -125,27 +131,25 @@ function listenToStoryChange() {
         })
       );
 
-      const t = normalizeInputTypes({
-        title: { control: 'text' },
-        titleColor: { control: 'color' },
-        content: { control: 'text' },
-        contentColor: { control: 'color' },
-        borderRadius: { control: { type: 'range', min: 0, max: 30, step: 1 } },
-        imageBorderRadius: { control: { type: 'range', min: 0, max: 30, step: 1 } },
-        boxShadow: { control: 'text' },
-        imageSrc: { control: 'text' },
+      api.updateStory(currentStory.storyId, {
+        parameters: {
+          controls: { hideNoControlsWarning: true },
+        },
       });
-      // console.log(api.getData())
-      console.log(t);
 
-      const api: API = (window as any).__TEST_SB_API__;
-      // api.updateStory(currentStory.storyId, {
-      //   // todo: get the argTypes from websocket
-      //   argTypes: t,
-      //   parameters: {
-      //     controls: { hideNoControlsWarning: true },
-      //   },
+      // const t = normalizeInputTypes({
+      //   title: { control: 'text' },
+      //   titleColor: { control: 'color' },
+      //   content: { control: 'text' },
+      //   contentColor: { control: 'color' },
+      //   borderRadius: { control: { type: 'range', min: 0, max: 30, step: 1 } },
+      //   imageBorderRadius: { control: { type: 'range', min: 0, max: 30, step: 1 } },
+      //   boxShadow: { control: 'text' },
+      //   imageSrc: { control: 'text' },
       // });
+      // console.log(api.getData())
+      // console.log(t);
+
       // // passing an empty object updates the current story!
       // api.updateStoryArgs({} as any, {
       //   title: 'Hello',
