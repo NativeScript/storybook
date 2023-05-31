@@ -15,6 +15,7 @@
         "assets": [
           "packages/storybook/*.md",
           "packages/storybook/index.d.ts",
+          "packages/storybook/nativescript.webpack.js",
           "LICENSE",
           {
             "glob": "**/*",
@@ -23,8 +24,8 @@
           },
           {
             "glob": "**/*",
-            "input": "packages/storybook/device",
-            "output": "./device"
+            "input": "packages/storybook/device/vue",
+            "output": "./device/vue"
           },
           {
             "glob": "**/*",

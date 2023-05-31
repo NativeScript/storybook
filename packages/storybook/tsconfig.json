@@ -1,13 +1,18 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "Node16",
+    "target": "ES2020",
+    "module": "esnext",
+    "lib": ["ESNext", "dom"],
+    "types": ["node"],
     "outDir": "../../dist/out-tsc",
     "rootDir": ".",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "noEmitHelpers": false,
-    "importHelpers": true,
-    "target": "ES6"
+    "importHelpers": true
   },
-  "exclude": ["**/*.spec.ts", "**/*.test.ts", "angular", "./device"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "angular", "./device/vue", "./device/storyDiscovery.ts"],
   "include": ["**/*.ts", "references.d.ts"]
 }

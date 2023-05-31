@@ -1,8 +1,8 @@
-import './polyfills';
-import '@angular/compiler';
+// import './polyfills';
+// import '@angular/compiler';
 
 import { AppHostView, APP_ROOT_VIEW, NativeScriptModule, platformNativeScript, runNativeScriptAngularApp, bootstrapApplication } from '@nativescript/angular';
-import '@angular/compiler';
+// import '@angular/compiler';
 
 import { Application, GridLayout, ProxyViewContainer } from '@nativescript/core';
 import { BehaviorSubject, Subject, retry } from 'rxjs';
@@ -21,11 +21,13 @@ function getCurrentStory(): any {
 
 import { webSocket } from 'rxjs/webSocket';
 
-const apiWebsocket = webSocket('ws://127.0.0.1:8080/device');
+declare const NSC_STORYBOOK_WS_ADDRESS: string;
+
+const apiWebsocket = webSocket(`${NSC_STORYBOOK_WS_ADDRESS}/device`);
 
 // todo: handle differnt patterns, this is hard-coded right now and ignores the user storybook config...
 // @ts-ignore
-const storiesCtx = require.context('../../../../../src/', true, /\.stories\.(js|ts)$/);
+const storiesCtx = require.context('~/', true, /\.stories\.(js|ts)$/);
 
 export const storiesMeta = new Map();
 let currentBehaviorSubject: BehaviorSubject<any> | null = null;

@@ -49,7 +49,7 @@ export const createStorybookWrapperComponent = (selector: string, template: stri
 
   @Component({
     selector,
-    template: `<GridLayout backgroundColor="red">${template}</GridLayout>`,
+    template: `<GridLayout>${template}</GridLayout>`,
     standalone: true,
     imports: [ngModule],
     providers,

@@ -5,7 +5,9 @@ import Vue from 'nativescript-vue';
 import { WebSocket } from '@valor/nativescript-websockets/websocket';
 import { storiesMeta } from '../storyDiscovery';
 
-const apiWebsocket = new WebSocket('ws://127.0.0.1:8080/device');
+declare const NSC_STORYBOOK_WS_ADDRESS: string;
+
+const apiWebsocket = new WebSocket(`${NSC_STORYBOOK_WS_ADDRESS}/device`);
 
 new Vue({
   data: {
