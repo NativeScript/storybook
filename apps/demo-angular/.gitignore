@@ -1,0 +1,4 @@
+hooks
+platforms
+!webpack.config.js
+.angular

@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "types": ["node"],
+    "outDir": "../../dist/out-tsc",
+    "rootDir": ".",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmitHelpers": false,
+    "importHelpers": true
+  },
+  "include": ["./src/bin/*.ts"]
+}

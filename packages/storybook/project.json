@@ -1,0 +1,101 @@
+{
+  "name": "storybook",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/storybook",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/storybook",
+        "tsConfig": "packages/storybook/tsconfig.json",
+        "packageJson": "packages/storybook/package.json",
+        "updateBuildableProjectDepsInPackageJson": false,
+        "main": "packages/storybook/index.d.ts",
+        "assets": [
+          "packages/storybook/*.md",
+          "packages/storybook/index.d.ts",
+          "packages/storybook/nativescript.webpack.js",
+          "LICENSE",
+          {
+            "glob": "**/*",
+            "input": "packages/storybook/platforms/",
+            "output": "./platforms/"
+          },
+          {
+            "glob": "**/*",
+            "input": "packages/storybook/device/vue",
+            "output": "./device/vue"
+          },
+          {
+            "glob": "storyDiscovery.ts",
+            "input": "packages/storybook/device",
+            "output": "./device"
+          },
+          {
+            "glob": "**/*",
+            "input": "packages/storybook/stubs",
+            "output": "./stubs"
+          }
+        ],
+        "dependsOn": [
+          {
+            "target": "build.all",
+            "projects": "dependencies"
+          }
+        ]
+      }
+    },
+    "build.bin": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "clean": false,
+        "outputPath": "dist/packages/storybook",
+        "tsConfig": "packages/storybook/tsconfig.bin.json",
+        "packageJson": "packages/storybook/package.json",
+        "main": "packages/storybook/src/bin/index.ts"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "build.all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node tools/scripts/build-finish.ts storybook",
+          "chmod +x dist/packages/storybook/src/bin/index.js"
+        ],
+        "parallel": false
+      },
+      "outputs": ["{workspaceRoot}/dist/packages/storybook"],
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        },
+        {
+          "target": "build.bin",
+          "projects": "self"
+        }
+      ]
+    },
+    "focus": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx g @nativescript/plugin-tools:focus-packages storybook"],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/storybook/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

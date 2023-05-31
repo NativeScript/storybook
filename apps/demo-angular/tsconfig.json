@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "importHelpers": true,
+    "paths": {
+      "~/*": ["src/*"],
+      "@demo/shared": ["tools/demo/index.ts"],
+      "@nativescript/storybook": ["packages/storybook/index.ts"]
+    }
+  },
+  "files": [
+    "./references.d.ts",
+    "./src/main.ts",
+    "./src/polyfills.ts",
+    "./src/sb-entry/entry.ts"
+  ],
+  "include": ["**/*.stories.ts", "./src/dummy.ts"]
+}

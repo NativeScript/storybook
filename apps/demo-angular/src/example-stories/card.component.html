@@ -1,0 +1,10 @@
+<GridLayout margin="20" height="800px" rows="*" columns="*" [borderRadius]="borderRadius" [style.box-shadow]="boxShadow">
+  <GridLayout rows="auto, auto" columns="*" backgroundColor="#fff" [borderRadius]="borderRadius" padding="10">
+    <Image height="450px" stretch="aspectFill" [borderRadius]="imageBorderRadius" [src]="imageSrc" [visibility]="imageSrc ? 'visible' : 'hidden'"></Image>
+
+    <StackLayout row="1" padding="15">
+      <Label [text]="title" [color]="titleColor" fontWeight="bold" fontSize="24"></Label>
+      <Label [text]="content" marginTop="10" [color]="contentColor" textWrap="true"></Label>
+    </StackLayout>
+  </GridLayout>
+</GridLayout>
