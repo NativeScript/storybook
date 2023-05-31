@@ -7,7 +7,10 @@ import { storiesMeta } from '../storyDiscovery';
 
 declare const NSC_STORYBOOK_WS_ADDRESS: string;
 
-const apiWebsocket = new WebSocket(`${NSC_STORYBOOK_WS_ADDRESS}/device`);
+// replaced by webpack DefinePlugin.
+const wsAddress = NSC_STORYBOOK_WS_ADDRESS;
+
+const apiWebsocket = new WebSocket(`${wsAddress}/device`);
 
 new Vue({
   data: {

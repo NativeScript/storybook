@@ -6,6 +6,8 @@ export default {
   component: MyButton,
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   argTypes: {
+    label: { control: 'text' },
+    primary: { control: 'boolean' },
     backgroundColor: { control: 'color' },
     size: {
       control: { type: 'select' },
@@ -16,9 +18,8 @@ export default {
 
 // More on component templates: https://storybook.js.org/docs/vue/writing-stories/introduction#using-args
 const Template = (args, { argTypes }) => ({
-  props: Object.keys(argTypes),
   components: { MyButton },
-  template: '', // '<my-button @onClick="onClick" v-bind="$props" />',
+  template: '<MyButton v-bind="$attrs" />',
 });
 
 export const Primary = Template.bind({});

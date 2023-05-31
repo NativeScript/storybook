@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 
-import { redBright, green, greenBright, yellow, cyan } from 'ansi-colors';
-import { program } from 'commander';
-import dedent from 'ts-dedent';
-import { resolve } from 'path';
-import { existsSync, readFileSync, writeFileSync, copyFileSync, mkdirSync, readdirSync } from 'fs';
 import { Utils } from '@nativescript/webpack';
-import type { IWebpackEnv } from '@nativescript/webpack';
-import type { Dirent } from 'fs';
+import { cyan, green, greenBright, redBright } from 'ansi-colors';
+import { program } from 'commander';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from 'fs';
+import { resolve } from 'path';
+import dedent from 'ts-dedent';
 
 const packagePath = resolve(process.cwd(), 'package.json');
 const tag = `[${green('@nativescript/storybook')}]`;
@@ -23,7 +28,9 @@ function info(message: string) {
 function initializeStubs() {
   const flavorName = Utils.flavor.determineProjectFlavor();
   if (!flavorName) {
-    error(`Could not determine project flavor. Please run this command from the root of your project.`);
+    error(
+      `Could not determine project flavor. Please run this command from the root of your project.`
+    );
     return;
   }
 

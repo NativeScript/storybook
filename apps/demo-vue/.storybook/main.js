@@ -1,15 +1,11 @@
+const { VueFramework } = require('@nativescript/storybook');
+
 module.exports = {
-  stories: ['../app/**/*.stories.js'],
-  /* prettier-ignore */
+  stories: ['../app/**/*.stories.ts'],
   addons: [
-    '@storybook/addon-actons',
-    // '@storybook/addon-links',
-    // '@storybook/addon-essentials',
-    // '@storybook/addon-interactions',
-    '@nativescript/storybook'
+    '@storybook/addon-controls',
+    '@nativescript/storybook',
+    // ...
   ],
-  core: {
-    builder: 'webpack5',
-  },
-  framework: '@storybook/vue',
+  framework: VueFramework,
 };

@@ -4,6 +4,22 @@
   "projectType": "library",
   "sourceRoot": "packages/storybook",
   "targets": {
+    "build.bin": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "clean": false,
+        "outputPath": "dist/packages/storybook",
+        "tsConfig": "packages/storybook/tsconfig.bin.json",
+        "packageJson": "packages/storybook/package.json",
+        "main": "packages/storybook/src/bin/index.ts"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
     "build": {
       "executor": "@nrwl/js:tsc",
       "options": {
@@ -28,6 +44,11 @@
             "output": "./device/vue"
           },
           {
+            "glob": "storyDiscovery.ts",
+            "input": "packages/storybook/device",
+            "output": "./device"
+          },
+          {
             "glob": "**/*",
             "input": "packages/storybook/stubs",
             "output": "./stubs"
@@ -44,7 +65,10 @@
     "build.all": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["node tools/scripts/build-finish.ts storybook", "chmod +x dist/packages/storybook/src/bin/index.js"],
+        "commands": [
+          "node tools/scripts/build-finish.ts storybook",
+          "chmod +x dist/packages/storybook/src/bin/index.js"
+        ],
         "parallel": false
       },
       "outputs": ["{workspaceRoot}/dist/packages/storybook"],
@@ -54,7 +78,7 @@
           "projects": "dependencies"
         },
         {
-          "target": "build",
+          "target": "build.bin",
           "projects": "self"
         }
       ]
