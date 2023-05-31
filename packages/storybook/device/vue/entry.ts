@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import Vue from 'nativescript-vue';
+import { Color, Label, View } from '@nativescript/core';
 import { WebSocket } from '@valor/nativescript-websockets/websocket';
+import Vue from 'nativescript-vue';
 import { storiesMeta } from '../storyDiscovery';
 
 declare const NSC_STORYBOOK_WS_ADDRESS: string;
@@ -11,6 +12,16 @@ declare const NSC_STORYBOOK_WS_ADDRESS: string;
 const wsAddress = NSC_STORYBOOK_WS_ADDRESS;
 
 const apiWebsocket = new WebSocket(`${wsAddress}/device`);
+
+const StorybookStory = Vue.extend({
+  props: ['currentComponent'],
+  template: `<component :is="currentComponent.component" v-bind="currentComponent.args"  />`,
+  errorCaptured(err, vm, info) {
+    console.log('errorCaptured', err, vm, info);
+
+    return true;
+  },
+});
 
 new Vue({
   data: {
@@ -70,12 +81,37 @@ new Vue({
       } as any;
     },
   },
+  computed: {
+    storyKey() {
+      return this.currentComponent
+        ? [this.currentComponent.id, JSON.stringify(this.currentComponent.args)].join(',')
+        : null;
+    },
+  },
+  methods: {
+    createStoryView(args) {
+      try {
+        const vm = new StorybookStory({
+          propsData: { currentComponent: this.currentComponent },
+        });
+        vm.$mount();
+        const view: View = (vm.$el as any).nativeView;
+        args.object.content = view;
+      } catch (err) {
+        console.error('Failed to render story:', err);
+        const errorLabel = new Label();
+        errorLabel.color = new Color('red');
+        errorLabel.text = err.toString();
+        args.object.content = errorLabel;
+      }
+    },
+  },
   template: `
     <GridLayout rows="auto, *">
-      <Label text="Storybook entry!"/>
+      <!-- <Label :text="storyKey" textWrap="true"/> -->
       <GridLayout row="1" backgroundColor="#fefefe" padding="16">
         <ContentView horizontalAlignment="left" verticalAlignment="top">
-          <component v-if="currentComponent" :is="currentComponent.component" v-bind="currentComponent.args" :key="currentComponent.id" />
+          <ContentView v-if="currentComponent" :key="storyKey" @loaded="createStoryView"/>
         </ContentView>
       </GridLayout>
     </GridLayout>
