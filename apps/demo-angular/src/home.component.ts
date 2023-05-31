@@ -9,14 +9,5 @@ export class HomeComponent {
     {
       name: 'storybook',
     },
-    {
-      name: 'storybook-device',
-    },
-    {
-      name: 'storybook-generator',
-    },
-    {
-      name: 'storybook-web',
-    },
   ];
 }

@@ -92,7 +92,6 @@ program
   .action(() => {
     initializeStubs();
     initializePackageJSON();
-    // TODO: generate tsconfig.storybook.json
     info('Initialized Storybook!');
   });
 

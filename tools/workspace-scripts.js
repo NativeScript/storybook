@@ -9,7 +9,8 @@ module.exports = {
     },
     format: {
       script: 'nx format:write',
-      description: 'Format source code of the entire workspace (auto-run on precommit hook)',
+      description:
+        'Format source code of the entire workspace (auto-run on precommit hook)',
     },
     '🔧': {
       script: `npx cowsay "NativeScript plugin demos make developers 😊"`,
@@ -81,20 +82,6 @@ module.exports = {
     // packages
     // build output is always in dist/packages
     '@nativescript': {
-      // @nativescript/storybook-device
-      'storybook-device': {
-        build: {
-          script: 'nx run storybook-device:build.all',
-          description: '@nativescript/storybook-device: Build',
-        },
-      },
-      // @nativescript/storybook-web
-      'storybook-web': {
-        build: {
-          script: 'nx run storybook-web:build.all',
-          description: '@nativescript/storybook-web: Build',
-        },
-      },
       // @nativescript/storybook
       storybook: {
         build: {
@@ -112,14 +99,6 @@ module.exports = {
       description: '_____________  Focus (VS Code supported)  _____________',
     },
     focus: {
-      'storybook-device': {
-        script: 'nx run storybook-device:focus',
-        description: 'Focus on @nativescript/storybook-device',
-      },
-      'storybook-web': {
-        script: 'nx run storybook-web:focus',
-        description: 'Focus on @nativescript/storybook-web',
-      },
       storybook: {
         script: 'nx run storybook:focus',
         description: 'Focus on @nativescript/storybook',

@@ -6,13 +6,10 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
-    "@nativescript/storybook-device": "file:../../packages/storybook-device",
-    "@nativescript/storybook-web": "file:../../packages/storybook-web",
-    "@nativescript/storybook-generator": "file:../../packages/storybook-generator",
     "@nativescript/storybook": "file:../../packages/storybook"
   },
   "devDependencies": {
-    "@nativescript/android": "~8.4.0",
-    "@nativescript/ios": "~8.4.0"
+    "@nativescript/android": "~8.5.0",
+    "@nativescript/ios": "~8.5.0"
   }
 }

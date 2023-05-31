@@ -5,10 +5,7 @@
   <StackLayout class="p-20">
     <ScrollView class="h-full">
       <StackLayout>
-        <Button text="storybook-device" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
-        <Button text="storybook-web" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
-<Button text="storybook-generator" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
-<Button text="storybook" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="storybook" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
       </StackLayout>
     </ScrollView>
   </StackLayout>

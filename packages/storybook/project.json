@@ -4,22 +4,6 @@
   "projectType": "library",
   "sourceRoot": "packages/storybook",
   "targets": {
-    "build.bin": {
-      "executor": "@nrwl/js:tsc",
-      "options": {
-        "clean": false,
-        "outputPath": "dist/packages/storybook",
-        "tsConfig": "packages/storybook/tsconfig.bin.json",
-        "packageJson": "packages/storybook/package.json",
-        "main": "packages/storybook/src/bin/index.ts"
-      },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        }
-      ]
-    },
     "build": {
       "executor": "@nrwl/js:tsc",
       "options": {
@@ -61,6 +45,22 @@
           }
         ]
       }
+    },
+    "build.bin": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "clean": false,
+        "outputPath": "dist/packages/storybook",
+        "tsConfig": "packages/storybook/tsconfig.bin.json",
+        "packageJson": "packages/storybook/package.json",
+        "main": "packages/storybook/src/bin/index.ts"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
     },
     "build.all": {
       "executor": "nx:run-commands",

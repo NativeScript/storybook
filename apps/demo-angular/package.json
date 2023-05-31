@@ -11,8 +11,6 @@
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
     "@nativescript/storybook": "file:../../dist/packages/storybook",
-    "@nativescript/storybook-device": "file:../../dist/packages/storybook-device",
-    "@nativescript/storybook-web": "file:../../dist/packages/storybook-web",
     "@valor/nativescript-websockets": "file:../../node_modules/@valor/nativescript-websockets"
   },
   "devDependencies": {
