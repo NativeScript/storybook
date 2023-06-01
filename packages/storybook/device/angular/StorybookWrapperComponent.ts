@@ -1,15 +1,40 @@
-import { AfterViewInit, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, Inject, NgModule, NO_ERRORS_SCHEMA, OnDestroy, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  ErrorHandler,
+  Inject,
+  Injectable,
+  NgModule,
+  NO_ERRORS_SCHEMA,
+  OnDestroy,
+  Type,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { map, skip } from 'rxjs/operators';
 
 import { ICollection, NgModuleMetadata } from './types';
 import { STORY_PROPS } from './StorybookProvider';
-import { ComponentInputsOutputs, getComponentInputsOutputs } from './utils/NgComponentAnalyzer';
+import {
+  ComponentInputsOutputs,
+  getComponentInputsOutputs,
+} from './utils/NgComponentAnalyzer';
 import { PropertyExtractor } from './utils/PropertyExtractor';
 
-const getNonInputsOutputsProps = (ngComponentInputsOutputs: ComponentInputsOutputs, props: ICollection = {}) => {
-  const inputs = ngComponentInputsOutputs.inputs.filter((i) => i.templateName in props).map((i) => i.templateName);
-  const outputs = ngComponentInputsOutputs.outputs.filter((o) => o.templateName in props).map((o) => o.templateName);
+const getNonInputsOutputsProps = (
+  ngComponentInputsOutputs: ComponentInputsOutputs,
+  props: ICollection = {}
+) => {
+  const inputs = ngComponentInputsOutputs.inputs
+    .filter((i) => i.templateName in props)
+    .map((i) => i.templateName);
+  const outputs = ngComponentInputsOutputs.outputs
+    .filter((o) => o.templateName in props)
+    .map((o) => o.templateName);
   return Object.keys(props).filter((k) => ![...inputs, ...outputs].includes(k));
 };
 
@@ -22,7 +47,14 @@ export const componentNgModules = new Map<any, Type<any>>();
  * @param storyComponent
  * @param initialProps
  */
-export const createStorybookWrapperComponent = (selector: string, template: string | undefined, storyComponent: Type<unknown> | undefined, styles: string[] | undefined, moduleMetadata: NgModuleMetadata, initialProps?: ICollection): Type<any> => {
+export const createStorybookWrapperComponent = (
+  selector: string,
+  template: string | undefined,
+  storyComponent: Type<unknown> | undefined,
+  styles: string[] | undefined,
+  moduleMetadata: NgModuleMetadata,
+  initialProps?: ICollection
+): Type<any> => {
   // In ivy, a '' selector is not allowed, therefore we need to just set it to anything if
   // storyComponent was not provided.
   const viewChildSelector = storyComponent ?? '__storybook-noop';
@@ -47,14 +79,33 @@ export const createStorybookWrapperComponent = (selector: string, template: stri
     ngModule = componentNgModules.get(storyComponent);
   }
 
+  @Injectable()
+  class GlobalErrorHandler extends ErrorHandler {
+    handleError(error: Error) {
+      // catch all throw's in the callstack and just report them here
+      console.error('GlobalErrorHandler', error);
+      console.error(error.stack);
+    }
+  }
+
   @Component({
     selector,
     template: `<GridLayout>${template}</GridLayout>`,
     standalone: true,
     imports: [ngModule],
-    providers,
+    providers: [
+      {
+        provide: ErrorHandler,
+        useClass: GlobalErrorHandler,
+      },
+      ...(providers || []),
+    ],
     styles,
-    schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA, ...(moduleMetadata.schemas || [])],
+    schemas: [
+      NO_ERRORS_SCHEMA,
+      CUSTOM_ELEMENTS_SCHEMA,
+      ...(moduleMetadata.schemas || []),
+    ],
   })
   class StorybookWrapperComponent implements AfterViewInit, OnDestroy {
     private storyComponentPropsSubscription: Subscription;
@@ -69,17 +120,22 @@ export const createStorybookWrapperComponent = (selector: string, template: stri
     // Used in case of a component without selector
     storyComponent = storyComponent ?? '';
 
-    constructor(@Inject(STORY_PROPS) private storyProps$: Subject<ICollection | undefined>, @Inject(ChangeDetectorRef) private changeDetectorRef: ChangeDetectorRef) {}
+    constructor(
+      @Inject(STORY_PROPS) private storyProps$: Subject<ICollection | undefined>,
+      @Inject(ChangeDetectorRef) private changeDetectorRef: ChangeDetectorRef
+    ) {}
 
     ngOnInit(): void {
       // Subscribes to the observable storyProps$ to keep these properties up to date
-      this.storyWrapperPropsSubscription = this.storyProps$.subscribe((storyProps = {}) => {
-        // All props are added as component properties
-        Object.assign(this, storyProps);
+      this.storyWrapperPropsSubscription = this.storyProps$.subscribe(
+        (storyProps = {}) => {
+          // All props are added as component properties
+          Object.assign(this, storyProps);
 
-        this.changeDetectorRef.detectChanges();
-        this.changeDetectorRef.markForCheck();
-      });
+          this.changeDetectorRef.detectChanges();
+          this.changeDetectorRef.markForCheck();
+        }
+      );
     }
 
     ngAfterViewInit(): void {
@@ -87,7 +143,10 @@ export const createStorybookWrapperComponent = (selector: string, template: stri
       if (this.storyComponentElementRef) {
         const ngComponentInputsOutputs = getComponentInputsOutputs(storyComponent);
 
-        const initialOtherProps = getNonInputsOutputsProps(ngComponentInputsOutputs, initialProps);
+        const initialOtherProps = getNonInputsOutputsProps(
+          ngComponentInputsOutputs,
+          initialProps
+        );
 
         // Initializes properties that are not Inputs | Outputs
         // Allows story props to override local component properties
@@ -98,7 +157,9 @@ export const createStorybookWrapperComponent = (selector: string, template: stri
         }
         // `markForCheck` the component in case this uses changeDetection: OnPush
         // And then forces the `detectChanges`
-        this.storyComponentViewContainerRef.injector.get(ChangeDetectorRef).markForCheck();
+        this.storyComponentViewContainerRef.injector
+          .get(ChangeDetectorRef)
+          .markForCheck();
         this.changeDetectorRef.detectChanges();
 
         // Once target component has been initialized, the storyProps$ observable keeps target component properties than are not Input|Output up to date
@@ -106,8 +167,14 @@ export const createStorybookWrapperComponent = (selector: string, template: stri
           .pipe(
             skip(1),
             map((props) => {
-              const propsKeyToKeep = getNonInputsOutputsProps(ngComponentInputsOutputs, props);
-              return propsKeyToKeep.reduce((acc, p) => ({ ...acc, [p]: props ? props[p] : null }), {});
+              const propsKeyToKeep = getNonInputsOutputsProps(
+                ngComponentInputsOutputs,
+                props
+              );
+              return propsKeyToKeep.reduce(
+                (acc, p) => ({ ...acc, [p]: props ? props[p] : null }),
+                {}
+              );
             })
           )
           .subscribe((props) => {
@@ -116,7 +183,9 @@ export const createStorybookWrapperComponent = (selector: string, template: stri
 
             // `markForCheck` the component in case this uses changeDetection: OnPush
             // And then forces the `detectChanges`
-            this.storyComponentViewContainerRef.injector.get(ChangeDetectorRef).markForCheck();
+            this.storyComponentViewContainerRef.injector
+              .get(ChangeDetectorRef)
+              .markForCheck();
             this.changeDetectorRef.detectChanges();
           });
       }
