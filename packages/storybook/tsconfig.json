@@ -13,13 +13,6 @@
     "noEmitHelpers": false,
     "importHelpers": true
   },
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "angular",
-    "./device/vue",
-    "./device/storyDiscovery.ts",
-    "./src/bin/*.ts"
-  ],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "angular", "./src/bin/*.ts"],
   "include": ["**/*.ts", "references.d.ts"]
 }

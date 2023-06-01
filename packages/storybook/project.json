@@ -24,16 +24,6 @@
           },
           {
             "glob": "**/*",
-            "input": "packages/storybook/device/vue",
-            "output": "./device/vue"
-          },
-          {
-            "glob": "storyDiscovery.ts",
-            "input": "packages/storybook/device",
-            "output": "./device"
-          },
-          {
-            "glob": "**/*",
             "input": "packages/storybook/stubs",
             "output": "./stubs"
           }
