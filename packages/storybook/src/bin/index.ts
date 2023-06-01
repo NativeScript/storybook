@@ -13,6 +13,7 @@ import {
 } from 'fs';
 import { resolve } from 'path';
 import dedent from 'ts-dedent';
+import * as childProcess from 'child_process';
 
 const packagePath = resolve(process.cwd(), 'package.json');
 const tag = `[${green('@nativescript/storybook')}]`;
@@ -84,6 +85,22 @@ function initializePackageJSON() {
   writeFileSync(packagePath, JSON.stringify(packageJson, null, 2));
 }
 
+function adjustNativeScriptConfig() {
+  childProcess.execSync(
+    [
+      /^win/.test(process.platform) ? 'ns.cmd' : 'ns',
+      'config',
+      'set',
+      'ios.discardUncaughtJsExceptions',
+      'true',
+    ].join(' '),
+    {
+      cwd: process.cwd(),
+      stdio: 'inherit',
+    }
+  );
+}
+
 program.enablePositionalOptions();
 
 program
@@ -92,6 +109,7 @@ program
   .action(() => {
     initializeStubs();
     initializePackageJSON();
+    adjustNativeScriptConfig();
     info('Initialized Storybook!');
   });
 
