@@ -1,6 +1,6 @@
 {
   "name": "@nativescript/storybook",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.11",
   "description": "Storybook for NativeScript",
   "main": "index.js",
   "module": "index.js",
