@@ -9,6 +9,7 @@
     "start": "storybook dev -p 53743 --no-open"
   },
   "dependencies": {
+    "@nativescript/angular": "file:../../node_modules/@nativescript/angular",
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
     "@nativescript/storybook": "file:../../dist/packages/storybook",
     "@valor/nativescript-websockets": "file:../../node_modules/@valor/nativescript-websockets"

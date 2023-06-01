@@ -6,6 +6,10 @@ import { WebSocket } from '@valor/nativescript-websockets/websocket';
 import Vue from 'nativescript-vue';
 import { storiesMeta } from '../storyDiscovery';
 
+import { StorybookWelcomeView } from '../StorybookWelcomeView';
+
+Vue.registerElement('StorybookWelcomeView', () => StorybookWelcomeView);
+
 declare const NSC_STORYBOOK_WS_ADDRESS: string;
 
 // replaced by webpack DefinePlugin.
@@ -107,13 +111,14 @@ new Vue({
     },
   },
   template: `
-    <GridLayout rows="auto, *">
-      <!-- <Label :text="storyKey" textWrap="true"/> -->
-      <GridLayout row="1" backgroundColor="#fefefe" padding="16">
+    <GridLayout rows="*">
+      <GridLayout backgroundColor="#fefefe" padding="16">
         <ContentView horizontalAlignment="left" verticalAlignment="top">
           <ContentView v-if="currentComponent" :key="storyKey" @loaded="createStoryView"/>
         </ContentView>
       </GridLayout>
+
+      <StorybookWelcomeView v-if="!currentComponent" />
     </GridLayout>
   `,
 }).$start();

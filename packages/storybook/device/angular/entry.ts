@@ -1,7 +1,15 @@
 // import './polyfills';
 // import '@angular/compiler';
 
-import { AppHostView, APP_ROOT_VIEW, NativeScriptModule, platformNativeScript, runNativeScriptAngularApp, bootstrapApplication } from '@nativescript/angular';
+import {
+  AppHostView,
+  APP_ROOT_VIEW,
+  NativeScriptModule,
+  platformNativeScript,
+  runNativeScriptAngularApp,
+  bootstrapApplication,
+  registerElement,
+} from '@nativescript/angular';
 // import '@angular/compiler';
 
 import { Application, GridLayout, ProxyViewContainer } from '@nativescript/core';
@@ -14,6 +22,8 @@ import { NgModule } from '@angular/core';
 import { STORY_PROPS } from './StorybookProvider';
 
 import { toId } from '@storybook/csf';
+
+import { StorybookWelcomeView } from '../StorybookWelcomeView';
 
 function getCurrentStory(): any {
   return null;
@@ -62,10 +72,24 @@ class StorybookRender {
   generateTargetSelectorFromStoryId() {
     const invalidHtmlTag = /[^A-Za-z0-9-]/g;
     const storyIdIsInvalidHtmlTagName = invalidHtmlTag.test(this.storyId);
-    return storyIdIsInvalidHtmlTagName ? `sb-${this.storyId.replace(invalidHtmlTag, '')}-component` : this.storyId;
+    return storyIdIsInvalidHtmlTagName
+      ? `sb-${this.storyId.replace(invalidHtmlTag, '')}-component`
+      : this.storyId;
   }
 
-  async render({ storyFnAngular, forced, parameters, component, targetDOMNode }: { storyFnAngular: StoryFnAngularReturnType; forced?: boolean; component?: any; parameters: Parameters; targetDOMNode?: HTMLElement }) {
+  async render({
+    storyFnAngular,
+    forced,
+    parameters,
+    component,
+    targetDOMNode,
+  }: {
+    storyFnAngular: StoryFnAngularReturnType;
+    forced?: boolean;
+    component?: any;
+    parameters: Parameters;
+    targetDOMNode?: HTMLElement;
+  }) {
     const targetSelector = `${this.generateTargetSelectorFromStoryId()}`;
     const application = getApplication({
       storyFnAngular,
@@ -175,7 +199,7 @@ function renderChange(newStory = getCurrentStory()) {
   }
 }
 Application.on(Application.launchEvent, (args: any) => {
-  args.root = null;
+  args.root = new StorybookWelcomeView();
 
   renderChange();
   let lastStoryId = null;
