@@ -1,7 +1,7 @@
 const { VueFramework } = require("@nativescript/storybook");
 
 module.exports = {
-  stories: ["../app/**/*.stories.ts"],
+  stories: ["../app/**/*.stories.@(js|ts)"],
   addons: [
     "@storybook/addon-controls",
     "@nativescript/storybook",
