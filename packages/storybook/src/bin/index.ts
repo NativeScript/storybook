@@ -13,7 +13,10 @@ import {
 } from 'fs';
 import { resolve } from 'path';
 import dedent from 'ts-dedent';
-import * as childProcess from 'child_process';
+import { execSync, spawn } from 'child_process';
+import { prompt } from 'prompts';
+
+const ns = /^win/.test(process.platform) ? 'ns.cmd' : 'ns';
 
 const packagePath = resolve(process.cwd(), 'package.json');
 const tag = `[${green('@nativescript/storybook')}]`;
@@ -80,25 +83,61 @@ function initializePackageJSON() {
     packageJson.scripts = {};
   }
   if (!packageJson.scripts['storybook']) {
-    packageJson.scripts['storybook'] = 'storybook dev -p 53743';
+    packageJson.scripts['storybook'] = 'nativescript-storybook dev';
   }
   writeFileSync(packagePath, JSON.stringify(packageJson, null, 2));
 }
 
 function adjustNativeScriptConfig() {
-  childProcess.execSync(
-    [
-      /^win/.test(process.platform) ? 'ns.cmd' : 'ns',
-      'config',
-      'set',
-      'ios.discardUncaughtJsExceptions',
-      'true',
-    ].join(' '),
-    {
-      cwd: process.cwd(),
-      stdio: 'inherit',
-    }
-  );
+  execSync([ns, 'config', 'set', 'ios.discardUncaughtJsExceptions', 'true'].join(' '), {
+    cwd: process.cwd(),
+    stdio: 'inherit',
+  });
+}
+
+function runStorybook() {
+  const storybookBinPath = require.resolve('@storybook/cli/bin/index');
+  const storybookCommand = `node ${storybookBinPath} dev`;
+  const storybookProcess = spawn(storybookCommand, {
+    shell: true,
+    stdio: 'inherit',
+  });
+
+  storybookProcess.on('exit', (code) => {
+    process.exit(code ?? 0);
+  });
+}
+
+function platformsToRun(platform: 'ios' | 'android' | 'all'): ('ios' | 'android')[] {
+  // validate platform
+  if (!['ios', 'android', 'all'].includes(platform)) {
+    error(
+      `Please specify a valid platform to run the app on. "${platform}" is not a valid platform. Valid platforms are "ios", "android" and "all".`
+    );
+    return [];
+  }
+
+  if (platform === 'all') {
+    return ['ios', 'android'];
+  }
+
+  return [platform];
+}
+
+function runNativeScriptApp(platform: 'ios' | 'android') {
+  const runCommand = `${ns} run ${platform} --no-hmr --env.storybook`;
+
+  info(`Starting NativeScript app on ${platform}...`);
+  info(`Running: ${runCommand}`);
+
+  const runProcess = spawn(runCommand, {
+    shell: true,
+    stdio: 'inherit',
+  });
+
+  runProcess.on('exit', (code) => {
+    process.exit(code ?? 0);
+  });
 }
 
 program.enablePositionalOptions();
@@ -113,6 +152,47 @@ program
     info('Initialized Storybook!');
   });
 
-program.version(require('../../package.json').version, '-v, --version');
+program
+  .command('start')
+  .alias('run')
+  .alias('dev')
+  .argument('[android|ios|all]', 'The platform to run the app on.')
+  .description('Start the Storybook server.')
+  .action(async (platform) => {
+    if (!platform) {
+      const res = await prompt({
+        type: 'select',
+        name: 'platform',
+        message: 'Select a platform to run storybook on',
+        choices: [
+          { title: 'Run on iOS', value: 'ios' },
+          { title: 'Run on Android', value: 'android' },
+          { title: 'Run on both', value: 'all' },
+        ],
+      });
 
+      if (!res.platform) {
+        // user cancelled
+        return;
+      }
+
+      platform = res.platform;
+    }
+
+    const platforms = platformsToRun(platform);
+
+    if (!platforms.length) {
+      return;
+    }
+
+    info('Starting Storybook...');
+    runStorybook();
+
+    platforms.forEach((platform) => {
+      runNativeScriptApp(platform);
+    });
+  });
+
+program.name('nativescript-storybook');
+program.version(require('../../package.json').version, '-v, --version');
 program.parse(process.argv);

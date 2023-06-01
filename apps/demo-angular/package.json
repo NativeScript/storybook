@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "storybook dev -p 53743 --no-open"
+    "storybook": "nativescript-storybook dev"
   },
   "dependencies": {
     "@nativescript/angular": "file:../../node_modules/@nativescript/angular",
