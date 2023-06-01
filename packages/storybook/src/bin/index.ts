@@ -163,11 +163,11 @@ program
       const res = await prompt({
         type: 'select',
         name: 'platform',
-        message: 'Select a platform to run storybook on',
+        message: 'Select a platform to run Storybook:',
         choices: [
-          { title: 'Run on iOS', value: 'ios' },
-          { title: 'Run on Android', value: 'android' },
-          { title: 'Run on both', value: 'all' },
+          { title: 'Android', value: 'android' },
+          { title: 'iOS', value: 'ios' },
+          { title: '✨ Both', value: 'all' },
         ],
       });
 
