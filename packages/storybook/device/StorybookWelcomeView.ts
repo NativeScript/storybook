@@ -1,5 +1,7 @@
 import { Color, GridLayout, Image, ItemSpec, Label } from '@nativescript/core';
 
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export class StorybookWelcomeView extends GridLayout {
   constructor() {
     super();
@@ -55,8 +57,8 @@ export class StorybookWelcomeView extends GridLayout {
 
     const renderPlaceholder = new Label();
     renderPlaceholder.row = 3;
-    renderPlaceholder.color = new Color('#f9fafb');
-    renderPlaceholder.text = 'Select a story to render here!';
+    renderPlaceholder.color = new Color('#4ade80');
+    renderPlaceholder.text = 'Waiting for story...';
     renderPlaceholder.borderWidth = 2;
     renderPlaceholder.borderColor = new Color('#374151');
     // renderPlaceholder.border
@@ -67,6 +69,24 @@ export class StorybookWelcomeView extends GridLayout {
     renderPlaceholder.paddingBottom = 32;
     renderPlaceholder.textAlignment = 'center';
     renderPlaceholder.marginTop = 24;
+
+    const pulse = async () => {
+      await renderPlaceholder.animate({
+        opacity: 0.5,
+        duration: 1000,
+      });
+      await wait(500);
+      await renderPlaceholder.animate({
+        opacity: 1,
+        duration: 1000,
+      });
+      await wait(500);
+
+      // repeat...
+      await pulse();
+    };
+
+    renderPlaceholder.once('loaded', () => pulse());
 
     // this.addChild(welcomeLabel);
     this.addChild(logos);
