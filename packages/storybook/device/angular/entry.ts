@@ -205,16 +205,20 @@ Application.on(Application.launchEvent, (args: any) => {
   let lastStoryId = null;
   apiWebsocket.pipe(retry()).subscribe((v: any) => {
     if (v.story.storyId !== lastStoryId || v.force) {
-      const meta = storiesMeta.get(v.story.storyId);
-      apiWebsocket.next({
-        kind: 'storyUpdate',
-        storyId: v.story.storyId,
-        argTypes: meta.meta.argTypes,
-        initialArgs: meta.args,
-        args: meta.args,
-      });
-      lastStoryId = v.story.storyId;
-      renderChange(v.story);
+      const story = storiesMeta.get(v.story.storyId);
+      if (story) {
+        apiWebsocket.next({
+          kind: 'storyUpdate',
+          storyId: v.story.storyId,
+          argTypes: story.meta.argTypes,
+          initialArgs: story.args,
+          args: story.args,
+        });
+        lastStoryId = v.story.storyId;
+        renderChange(v.story);
+      } else {
+        console.error('Story ID not found:', v.story.storyId);
+      }
     } else if (currentBehaviorSubject) {
       currentBehaviorSubject.next(v.story.args);
     }
